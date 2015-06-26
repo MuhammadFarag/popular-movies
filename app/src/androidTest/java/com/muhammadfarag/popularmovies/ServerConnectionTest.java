@@ -1,5 +1,7 @@
 package com.muhammadfarag.popularmovies;
 
+import android.content.Context;
+import android.net.Uri;
 import android.test.AndroidTestCase;
 
 import junit.framework.TestCase;
@@ -17,46 +19,48 @@ import java.net.URL;
 public class ServerConnectionTest extends AndroidTestCase {
 
     public void testRetrievingMoviesDataFromServerWithoutKeyWillResultInUnauthorizedResponse() throws Exception {
-        String url = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc";
-        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
+        assertNull("Unauthorized response resulted in null value", getData(getContext(), ""));
+    }
+
+
+    public void testRetrievingMoviesDataFromServerReturnsResult() throws Exception {
+        String apikey = getContext().getString(R.string.server_api_key);
+        assertNotSame("Data retrieved is not empty", 0, getData(getContext(), apikey).length());
+    }
+
+    private static String getData(Context context, String apiKey) throws IOException {
+        String baseUrl = context.getString(R.string.server_base_url);
+        Uri uri = Uri.parse(baseUrl).buildUpon()
+                .appendQueryParameter("sort_by", "popularity.desc")
+                .appendQueryParameter("api_key", apiKey).build();
+
+        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(uri.toString()).openConnection();
         httpURLConnection.connect();
-        int responseCode;
+
+        int responseCode = 0;
         try {
             responseCode = httpURLConnection.getResponseCode();
         } catch (IOException e) {
             responseCode = httpURLConnection.getResponseCode();
         }
-        assertEquals(HttpURLConnection.HTTP_UNAUTHORIZED, responseCode);
+
+        switch (responseCode) {
+            case HttpURLConnection.HTTP_OK:
+                InputStream inputStream = httpURLConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+                return buffer.toString();
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
+                return null;
+            default:
+                throw new IllegalStateException("Connection method is not equiped to handle this case");
+        }
     }
 
-    public void testRetrievingMoviesDataFromServerWithKeyWillResultInSuccessResponse() throws Exception {
-        String url = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc";
-        String apikey = getContext().getString(R.string.server_api_key);
-        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url + "&api_key=" + apikey).openConnection();
-        httpURLConnection.connect();
-        int responseCode;
-        try {
-            responseCode = httpURLConnection.getResponseCode();
-        } catch (IOException e) {
-            responseCode = httpURLConnection.getResponseCode();
-        }
-        assertEquals("Successful connection test, please make sure that the api_key is properly set",HttpURLConnection.HTTP_OK, responseCode);
-    }
-
-    public void testRetrievingMoviesDataFromServerReturnsResult() throws Exception{
-        String url = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc";
-        String apikey = getContext().getString(R.string.server_api_key);
-        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url + "&api_key=" + apikey).openConnection();
-        httpURLConnection.connect();
-        InputStream inputStream = httpURLConnection.getInputStream();
-        StringBuffer buffer = new StringBuffer();
-        assertNotNull(inputStream);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            buffer.append(line + "\n");
-        }
-        assertNotSame("Data retrieved is not empty",0,buffer.length());
-    }
 
 }
