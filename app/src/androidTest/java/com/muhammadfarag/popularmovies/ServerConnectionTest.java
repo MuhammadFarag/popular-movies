@@ -26,8 +26,17 @@ public class ServerConnectionTest extends AndroidTestCase {
         assertEquals(HttpURLConnection.HTTP_UNAUTHORIZED, responseCode);
     }
 
-    public void testRetrivalOfApiKeyFromResourceFile(){
+    public void testRetrievingMoviesDataFromServerWithKeyWillResultInSuccessResponse() throws Exception {
+        String url = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc";
         String apikey = getContext().getString(R.string.server_api_key);
-        assertEquals("Dummy Api Key retrival","dummy-api-key",apikey);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url + "&api_key=" + apikey).openConnection();
+        httpURLConnection.connect();
+        int responseCode;
+        try {
+            responseCode = httpURLConnection.getResponseCode();
+        } catch (IOException e) {
+            responseCode = httpURLConnection.getResponseCode();
+        }
+        assertEquals("Successful connection test, please make sure that the api_key is properly set",HttpURLConnection.HTTP_OK, responseCode);
     }
 }
