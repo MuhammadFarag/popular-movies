@@ -12,32 +12,30 @@ import org.json.JSONObject;
  */
 public class DataParsingTest extends AndroidTestCase {
 
+    DataParser parser;
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        parser = new DataParser(getContext().getString(R.string.server_example_payload));
+    }
+
     public void testCanRetrievePageNumber() throws JSONException {
-        String testData = getContext().getString(R.string.server_example_payload);
-        JSONObject jsonTestData = new JSONObject(testData);
-        int pageNumber = jsonTestData.getInt("page");
+        int pageNumber = parser.getCurrentPageNumber();
         assertEquals("Page number", 1, pageNumber);
     }
 
     public void testCanRetrieveTotalPages() throws JSONException {
-        String testData = getContext().getString(R.string.server_example_payload);
-        JSONObject jsonTestData = new JSONObject(testData);
-        int pageNumber = jsonTestData.getInt("total_pages");
+        int pageNumber = parser.getTotalNumberOfPages();
         assertEquals("Total number of pages", 11584, pageNumber);
     }
 
     public void testCanRetrieveTotalResults() throws JSONException {
-        String testData = getContext().getString(R.string.server_example_payload);
-        JSONObject jsonTestData = new JSONObject(testData);
-        int pageNumber = jsonTestData.getInt("total_results");
+        int pageNumber = parser.getTotalNumberOfResults();
         assertEquals("total number of results", 231676, pageNumber);
     }
 
     public void testCheckSizeOfRetrievedResults() throws JSONException {
-        String testData = getContext().getString(R.string.server_example_payload);
-        JSONObject jsonTestData = new JSONObject(testData);
-        JSONArray results = jsonTestData.getJSONArray("results");
-        int pageNumber = results.length();
+        int pageNumber = parser.getNumberOfResultsInCurrentPage();
         assertEquals("Number of results per page", 20, pageNumber);
     }
 
@@ -53,4 +51,31 @@ public class DataParsingTest extends AndroidTestCase {
         assertEquals("Release Date", "2015-06-12", firstMovieJson.getString("release_date"));
     }
 
+    class DataParser{
+        private String testData;
+        private final JSONObject jsonTestData;
+
+        public DataParser(String testData) throws JSONException {
+            this.testData = testData;
+            jsonTestData = new JSONObject(testData);
+        }
+
+        public int getCurrentPageNumber() throws JSONException {
+            return jsonTestData.getInt("page");
+        }
+
+
+        public int getTotalNumberOfPages() throws JSONException {
+            return jsonTestData.getInt("total_pages");
+        }
+
+        public int getTotalNumberOfResults() throws JSONException {
+            return jsonTestData.getInt("total_results");
+        }
+
+        public int getNumberOfResultsInCurrentPage() throws JSONException {
+            JSONArray results = jsonTestData.getJSONArray("results");
+            return results.length();
+        }
+    }
 }
