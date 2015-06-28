@@ -2,9 +2,11 @@ package com.muhammadfarag.popularmovies;
 
 import android.content.Context;
 import android.test.AndroidTestCase;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,22 +25,61 @@ public class CustomArrayAdapterTest extends AndroidTestCase {
         super.setUp();
 
         data = Arrays.asList("Hello", "world");
-        arrayAdapter = new CustomArrayAdapter(getContext(), R.layout.grid_view_cell, R.id.grid_view_cell, data);
+        arrayAdapter = new CustomArrayAdapter(getContext(), R.layout.grid_view_cell, data);
     }
 
     public void testGetItem() {
         assertEquals("Hello", arrayAdapter.getItem(0));
     }
 
-    public void testGetView() {
+    public void testGetCount() {
+        assertEquals(data.size(), arrayAdapter.getCount());
+    }
+
+    public void testGetId() {
+        assertEquals(0, arrayAdapter.getItemId(0));
+    }
+
+    public void testGetViewReturnsAnImageView() {
         View view = arrayAdapter.getView(0, null, null);
-        assertTrue(view instanceof TextView);
+        assertNotNull("Required view is null", view);
+        String assertionText = "Expected ImageView but found: " + view.getClass().getSimpleName();
+        assertTrue(assertionText, view instanceof ImageView);
     }
 
 
-    private class CustomArrayAdapter extends ArrayAdapter<String> {
-        public CustomArrayAdapter(Context context, int resource, int textViewResourceId, List<String> objects) {
-            super(context, resource, textViewResourceId, objects);
+    private class CustomArrayAdapter extends BaseAdapter {
+
+        private final Context context;
+        private final int resource;
+        private final List<String> elements;
+
+        public CustomArrayAdapter(Context context, int resource, List<String> elements) {
+            this.context = context;
+            this.resource = resource;
+            this.elements = elements;
+        }
+
+        @Override
+        public int getCount() {
+            return elements.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return elements.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View imageView = LayoutInflater.from(getContext()).inflate(this.resource, parent, false);
+            return imageView;
+
         }
     }
 }
