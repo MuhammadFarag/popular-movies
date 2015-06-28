@@ -15,16 +15,28 @@ import java.util.List;
  */
 public class CustomArrayAdapterTest extends AndroidTestCase {
 
-    public void testSimpleArrayAdapter() {
-        List<String> data = Arrays.asList("Hello", "world");
-        CustomArrayAdapter arrayAdapter = new CustomArrayAdapter(getContext(), R.layout.grid_view_cell, R.id.grid_view_cell, data);
-        assertEquals("Hello",arrayAdapter.getItem(0));
+    private List<String> data;
+    private CustomArrayAdapter arrayAdapter;
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+
+        data = Arrays.asList("Hello", "world");
+        arrayAdapter = new CustomArrayAdapter(getContext(), R.layout.grid_view_cell, R.id.grid_view_cell, data);
+    }
+
+    public void testGetItem() {
+        assertEquals("Hello", arrayAdapter.getItem(0));
+    }
+
+    public void testGetView() {
         View view = arrayAdapter.getView(0, null, null);
         assertTrue(view instanceof TextView);
     }
 
 
-    private class CustomArrayAdapter extends ArrayAdapter<String>{
+    private class CustomArrayAdapter extends ArrayAdapter<String> {
         public CustomArrayAdapter(Context context, int resource, int textViewResourceId, List<String> objects) {
             super(context, resource, textViewResourceId, objects);
         }
