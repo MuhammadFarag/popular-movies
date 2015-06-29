@@ -23,7 +23,6 @@ public class CustomArrayAdapterTest extends AndroidTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
         data = Arrays.asList("Hello", "world");
         arrayAdapter = new CustomArrayAdapter(getContext(), R.layout.grid_view_cell, data);
     }
@@ -47,6 +46,11 @@ public class CustomArrayAdapterTest extends AndroidTestCase {
         assertTrue(assertionText, view instanceof ImageView);
     }
 
+    public void testAnImageIsLoadedInImageView() throws InterruptedException {
+        ImageView view = (ImageView) arrayAdapter.getView(0, null, null);
+        assertNotNull("Required view is null", view);
+        assertNotNull("No image has been loaded in ImageView", view.getDrawable());
+    }
 
     private class CustomArrayAdapter extends BaseAdapter {
 
@@ -77,9 +81,15 @@ public class CustomArrayAdapterTest extends AndroidTestCase {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View imageView = LayoutInflater.from(getContext()).inflate(this.resource, parent, false);
-            return imageView;
+            ImageView view = (ImageView) convertView;
+            if (view == null) {
+                view = (ImageView) LayoutInflater.from(this.context).inflate(this.resource, parent, false);
+            }
 
+//            String url = getItem(position);
+
+            view.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
+            return view;
         }
     }
 }
