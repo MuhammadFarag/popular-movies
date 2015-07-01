@@ -1,23 +1,34 @@
 package com.muhammadfarag.popularmovies;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private CustomArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        CustomArrayAdapter arrayAdapter = new CustomArrayAdapter(getApplicationContext(), R.id.grid_view_cell, new ArrayList<String>());
+        List<String> elements = new ArrayList<>();
+        arrayAdapter = new CustomArrayAdapter(getApplicationContext(), R.layout.grid_view_cell, elements);
         GridView gridViewLayout = (GridView) findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
+        FetchMoviesData fetchMoviesData = new FetchMoviesData();
+        fetchMoviesData.execute();
+
     }
 
     @Override
@@ -41,4 +52,48 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private class FetchMoviesData extends AsyncTask<Void, Void, List<String>> {
+
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
+            String data = null;
+            try {
+                data = connector.getData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnauthorizedException e) {
+                e.printStackTrace();
+            }
+            DataParser parser = null;
+            try {
+                parser = new DataParser(data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            int numberOfResultsInCurrentPage = 0;
+            try {
+                numberOfResultsInCurrentPage = parser.getNumberOfResultsInCurrentPage();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            List<String> urls = new ArrayList<>();
+            for (int i = 0; i < numberOfResultsInCurrentPage; i++) {
+                try {
+                    urls.add(parser.getMovie(i).getPosterUrl());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return urls;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> strings) {
+            arrayAdapter.updateValues(strings);
+        }
+    }
+
+
 }
