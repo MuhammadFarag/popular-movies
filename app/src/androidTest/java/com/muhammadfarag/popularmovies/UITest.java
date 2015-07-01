@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridView;
+import android.widget.ListAdapter;
 
 /**
  * Project: Popular Movies
@@ -27,6 +28,13 @@ public class UITest extends ActivityInstrumentationTestCase2<MainActivity> {
         assertNotNull(layoutParams);
         assertEquals("Layout width", layoutParams.width, WindowManager.LayoutParams.MATCH_PARENT);
         assertEquals("Layout height", layoutParams.height, WindowManager.LayoutParams.MATCH_PARENT);
+    }
+
+    public void testGridViewIsAssociatedWithAdapter() {
+        GridView gridViewLayout = (GridView) getActivity().findViewById(R.id.grid_view_layout);
+        ListAdapter adapter = gridViewLayout.getAdapter();
+        assertNotNull("GridView has no associated adapter", adapter);
+        assertTrue("adapter is not of the appropriate type",adapter instanceof CustomArrayAdapter);
     }
 
 }
