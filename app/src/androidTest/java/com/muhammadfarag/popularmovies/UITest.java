@@ -26,8 +26,8 @@ public class UITest extends ActivityInstrumentationTestCase2<MainActivity> {
         final ViewGroup.LayoutParams layoutParams =
                 gridViewLayout.getLayoutParams();
         assertNotNull(layoutParams);
-        assertEquals("Layout width", layoutParams.width, WindowManager.LayoutParams.MATCH_PARENT);
-        assertEquals("Layout height", layoutParams.height, WindowManager.LayoutParams.MATCH_PARENT);
+        assertEquals("Layout width", WindowManager.LayoutParams.MATCH_PARENT, layoutParams.width);
+        assertEquals("Layout height", WindowManager.LayoutParams.MATCH_PARENT,layoutParams.height);
     }
 
     public void testGridViewIsAssociatedWithAdapter() {
