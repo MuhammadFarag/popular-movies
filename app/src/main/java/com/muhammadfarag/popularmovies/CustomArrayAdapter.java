@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,8 @@ class CustomArrayAdapter extends BaseAdapter {
 
     private final Context context;
     private final int resource;
-    private final List<String> elements;
+    private List<String> elements;
+    private final Object mLock = new Object();
 
     public CustomArrayAdapter(Context context, int resource, List<String> elements) {
         this.context = context;
@@ -47,9 +50,19 @@ class CustomArrayAdapter extends BaseAdapter {
             view = (ImageView) LayoutInflater.from(this.context).inflate(this.resource, parent, false);
         }
 
-//            String url = getItem(position);
+        String url = (String) getItem(position);
+        Picasso.with(context).load(url).into(view);
+//        Picasso.with(context).load(albumURL).error(R.drawable.no_album_art).into(holder.cell_image);
 
-        view.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
+
+//        view.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
         return view;
+    }
+
+    public void updateValues(List<String> elements) {
+        synchronized (mLock) {
+            this.elements = elements;
+        }
+        notifyDataSetChanged();
     }
 }
