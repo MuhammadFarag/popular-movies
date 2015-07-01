@@ -9,14 +9,14 @@ class Movie {
     private double userRating;
     private String releaseDate;
     private String plotSynopsis;
-    private String posterPath;
+    private String posterUrl;
 
     public Movie(String originalTitle, double userRating, String releaseDate, String plotSynopsis, String posterPath) {
         this.originalTitle = originalTitle;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
         this.plotSynopsis = plotSynopsis;
-        this.posterPath = posterPath;
+        this.posterUrl =  "http://image.tmdb.org/t/p/w185" + posterPath;
     }
 
     public String getOriginalTitle() {
@@ -35,7 +35,7 @@ class Movie {
         return plotSynopsis;
     }
 
-    public String getPosterPath() {
-        return posterPath;
+    public String getPosterUrl() {
+        return posterUrl;
     }
 }

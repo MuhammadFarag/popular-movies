@@ -40,7 +40,7 @@ public class DataParsingTest extends AndroidTestCase {
 
     public void testRetrievalOfFirstMovieData() throws JSONException {
         assertEquals("Original Title", "Jurassic World", parser.getMovie(0).getOriginalTitle());
-        assertEquals("Poster path", "/uXZYawqUsChGSj54wcuBtEdUJbh.jpg", parser.getMovie(0).getPosterPath());
+        assertEquals("Poster path", "http://image.tmdb.org/t/p/w185/uXZYawqUsChGSj54wcuBtEdUJbh.jpg", parser.getMovie(0).getPosterUrl());
         assertEquals("Plot synopsis", "Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond.", parser.getMovie(0).getPlotSynopsis());
         assertEquals("User Rating", 7d, parser.getMovie(0).getUserRating());
         assertEquals("Release Date", "2015-06-12", parser.getMovie(0).getReleaseDate());
