@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Project: Popular Movies
  * Created by muhammad on 27/06/15.
@@ -47,5 +50,16 @@ class DataParser {
         JSONArray results = jsonObject.getJSONArray(RESULTS_kEY);
         JSONObject movieJsonObject = results.getJSONObject(id);
         return new Movie(movieJsonObject.getString(ORIGINAL_TITLE_KEY), movieJsonObject.getDouble(VOTE_AVERAGE_KEY), movieJsonObject.getString(RELEASE_DATE_KEY), movieJsonObject.getString(OVERVIEW_KEY), movieJsonObject.getString(POSTER_PATH_KEY));
+    }
+
+    public List<Movie> getMovies() throws JSONException {
+        List<Movie> movies = new ArrayList<>();
+        JSONArray results = jsonObject.getJSONArray(RESULTS_kEY);
+        for (int i = 0; i < results.length(); i++) {
+            JSONObject movieJsonObject = results.getJSONObject(i);
+            Movie movie = new Movie(movieJsonObject.getString(ORIGINAL_TITLE_KEY), movieJsonObject.getDouble(VOTE_AVERAGE_KEY), movieJsonObject.getString(RELEASE_DATE_KEY), movieJsonObject.getString(OVERVIEW_KEY), movieJsonObject.getString(POSTER_PATH_KEY));
+            movies.add(movie);
+        }
+        return movies;
     }
 }

@@ -60,4 +60,42 @@ class MovieDatabaseServerConnector {
                 throw new IllegalStateException("Connection method is not equipped to handle this case");
         }
     }
+
+    public String getPage(int page) throws IOException, UnauthorizedException{
+        String baseUrl = this.context.getString(R.string.server_base_url);
+        // TODO: store string constants in resource file(s)
+        Uri uri = Uri.parse(baseUrl).buildUpon()
+                .appendQueryParameter("sort_by", "popularity.desc")
+                .appendQueryParameter("api_key", this.apikey)
+                .appendQueryParameter("page", String.valueOf(page))
+                .build();
+
+        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(uri.toString()).openConnection();
+        httpURLConnection.connect();
+
+        int responseCode;
+        try {
+            responseCode = httpURLConnection.getResponseCode();
+        } catch (IOException e) {
+            responseCode = httpURLConnection.getResponseCode();
+        }
+
+        switch (responseCode) {
+            case HttpURLConnection.HTTP_OK:
+                InputStream inputStream = httpURLConnection.getInputStream();
+                StringBuilder stringBuilder = new StringBuilder();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                    stringBuilder.append("\n");
+                }
+                return stringBuilder.toString();
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
+                throw new UnauthorizedException();
+            default:
+                throw new IllegalStateException("Connection method is not equipped to handle this case");
+        }
+    }
 }
