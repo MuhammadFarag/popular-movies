@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ServerApiWrapperTest extends AndroidTestCase {
 
+    private static final int DEFAULT_SERVER_PAGE_SIZE = 20;
+
     public void testGivenTotalNumberOfMoviesAndRequiredMoviesPerPageCaclculateNumberOfPages() {
         int totalNumberOfMovies = 1002;
         int requiredPageSize = 40;
@@ -22,25 +24,41 @@ public class ServerApiWrapperTest extends AndroidTestCase {
         assertEquals("Number of pages calculated is not correct", expected, actual);
     }
 
-    public void testGivenRequiredPageSizeReturnListOfMoviesOfTheSameSize() throws Exception {
+    public void testGivenRequiredPageSizeOf40ReturnListOfMoviesOfTheSameSizeForFirstPage() throws Exception {
         int requiredPageSize = 40;
-        List<Movie> movies = new ArrayList<>();
+        int page = 1;
         MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getContext());
-        String data1 = connector.getPage(1);
-        String data2 = connector.getPage(2);
+        String data1 = connector.getPage(page);
+        String data2 = connector.getPage(page + 1);
         DataParser parser1 = new DataParser(data1);
         DataParser parser2 = new DataParser(data2);
-        int numberOfResultsInCurrentPage = parser1.getMovies().size() + parser2.getMovies().size();
+        List<Movie> movies = new ArrayList<>();
+        movies.addAll(parser1.getMovies());
+        movies.addAll(parser2.getMovies());
+        int numberOfResultsInCurrentPage = movies.size();
+
+        assertEquals("Number of movies returned in list", requiredPageSize, numberOfResultsInCurrentPage);
+    }
+
+    public void testGivenRequiredPageSizeOf60ReturnListOfMoviesOfTheSameSizeForThirdPage() throws Exception {
+        int requiredPageSize = 60;
+        MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getContext());
+        String data1 = connector.getPage(7);
+        String data2 = connector.getPage(8);
+        String data3 = connector.getPage(9);
+        DataParser parser1 = new DataParser(data1);
+        DataParser parser2 = new DataParser(data2);
+        DataParser parser3 = new DataParser(data3);
+        int numberOfResultsInCurrentPage = parser1.getMovies().size() + parser2.getMovies().size() + parser3.getMovies().size();
 
         assertEquals("Number of movies returned in list", requiredPageSize, numberOfResultsInCurrentPage);
     }
 
     public void testGivenRequiredPageSizeCalculateRequiredServerPagesBoundsExample1() {
         int requiredPageSize = 60;
-        int defaultServerPageSize = 20;
         int pageNumber = 3;
 
-        int numberOfServerPagesPerResult = requiredPageSize / defaultServerPageSize;
+        int numberOfServerPagesPerResult = requiredPageSize / DEFAULT_SERVER_PAGE_SIZE;
         int firstRequiredPage = (pageNumber - 1) * numberOfServerPagesPerResult + 1;
         int lastRequiredPage = pageNumber * numberOfServerPagesPerResult;
 
@@ -51,10 +69,9 @@ public class ServerApiWrapperTest extends AndroidTestCase {
 
     public void testGivenRequiredPageSizeCalculateRequiredServerPagesBoundsExample2() {
         int requiredPageSize = 40;
-        int defaultServerPageSize = 20;
         int pageNumber = 5;
 
-        int numberOfServerPagesPerResult = requiredPageSize / defaultServerPageSize;
+        int numberOfServerPagesPerResult = requiredPageSize / DEFAULT_SERVER_PAGE_SIZE;
         int firstRequiredPage = (pageNumber - 1) * numberOfServerPagesPerResult + 1;
         int lastRequiredPage = pageNumber * numberOfServerPagesPerResult;
 
