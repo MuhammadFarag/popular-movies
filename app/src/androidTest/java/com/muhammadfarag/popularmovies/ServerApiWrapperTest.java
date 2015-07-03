@@ -11,18 +11,18 @@ import java.util.List;
  */
 public class ServerApiWrapperTest extends AndroidTestCase {
 
-    public void testGivenTotalNumberOfMoviesAndRequiredMoviesPerPageCaclculateNumberOfPages(){
+    public void testGivenTotalNumberOfMoviesAndRequiredMoviesPerPageCaclculateNumberOfPages() {
         int totalNumberOfMovies = 1002;
         int requiredPageSize = 40;
         int expected = 26;
-        int actual = totalNumberOfMovies/requiredPageSize;
-        if(totalNumberOfMovies%requiredPageSize != 0){
+        int actual = totalNumberOfMovies / requiredPageSize;
+        if (totalNumberOfMovies % requiredPageSize != 0) {
             actual += 1;
         }
         assertEquals("Number of pages calculated is not correct", expected, actual);
     }
 
-    public void testGivenRequiredPageSizeReturnListOfMoviesOfTheSameSize() throws Exception{
+    public void testGivenRequiredPageSizeReturnListOfMoviesOfTheSameSize() throws Exception {
         int requiredPageSize = 40;
         List<Movie> movies = new ArrayList<>();
         MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getContext());
@@ -33,5 +33,32 @@ public class ServerApiWrapperTest extends AndroidTestCase {
         int numberOfResultsInCurrentPage = parser1.getMovies().size() + parser2.getMovies().size();
 
         assertEquals("Number of movies returned in list", requiredPageSize, numberOfResultsInCurrentPage);
+    }
+
+    public void testGivenRequiredPageSizeCalculateRequiredServerPagesBoundsExample1() {
+        int requiredPageSize = 60;
+        int defaultServerPageSize = 20;
+        int pageNumber = 3;
+
+        int numberOfServerPagesPerResult = requiredPageSize / defaultServerPageSize;
+        int firstRequiredPage = (pageNumber - 1) * numberOfServerPagesPerResult + 1;
+        int lastRequiredPage = pageNumber * numberOfServerPagesPerResult;
+
+        assertEquals("First Required Page", 7, firstRequiredPage);
+        assertEquals("Last Required Page", 9, lastRequiredPage);
+    }
+
+
+    public void testGivenRequiredPageSizeCalculateRequiredServerPagesBoundsExample2() {
+        int requiredPageSize = 40;
+        int defaultServerPageSize = 20;
+        int pageNumber = 5;
+
+        int numberOfServerPagesPerResult = requiredPageSize / defaultServerPageSize;
+        int firstRequiredPage = (pageNumber - 1) * numberOfServerPagesPerResult + 1;
+        int lastRequiredPage = pageNumber * numberOfServerPagesPerResult;
+
+        assertEquals("First Required Page", 9, firstRequiredPage);
+        assertEquals("Last Required Page", 10, lastRequiredPage);
     }
 }
