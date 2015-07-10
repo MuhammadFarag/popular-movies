@@ -67,15 +67,14 @@ class MovieDatabaseServerConnector {
         }
     }
 
-    public String getPage(int page) throws IOException, UnauthorizedException{
+    public String getPage(int page, int sortCriteria) throws IOException, UnauthorizedException{
         String baseUrl = this.context.getString(R.string.server_base_url);
         // TODO: store string constants in resource file(s)
         Uri uri = Uri.parse(baseUrl).buildUpon()
-                .appendQueryParameter("sort_by", "popularity.desc")
+                .appendQueryParameter("sort_by", sortCriteria == 0?"popularity.desc":"vote_average.desc")
                 .appendQueryParameter("api_key", this.apikey)
                 .appendQueryParameter("page", String.valueOf(page))
                 .build();
-
         HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(uri.toString()).openConnection();
         httpURLConnection.connect();
 
@@ -105,14 +104,14 @@ class MovieDatabaseServerConnector {
         }
     }
 
-    public List<Movie> getMovies(int page, int pageSize) throws IOException, UnauthorizedException, JSONException {
+    public List<Movie> getMovies(int page, int pageSize, int sortCriteria) throws IOException, UnauthorizedException, JSONException {
         int numberOfServerPagesPerResult = pageSize / DEFAULT_SERVER_PAGE_SIZE;
         int firstRequiredPage = (page - 1) * numberOfServerPagesPerResult + 1;
         int lastRequiredPage = page * numberOfServerPagesPerResult;
 
         List<Movie> movies = new ArrayList<>();
         for (int i = firstRequiredPage; i <= lastRequiredPage; i++) {
-            String pageData = getPage(i);
+            String pageData = getPage(i, sortCriteria);
             movies.addAll(new DataParser(pageData).getMovies());
         }
         return movies;

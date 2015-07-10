@@ -20,6 +20,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private CustomArrayAdapter arrayAdapter;
+    private int sortCriteria = 0; // sort by popularity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sorting) {
+            if(this.sortCriteria == 0){
+                this.sortCriteria = 1;
+                item.setTitle("Sort By Popularity");
+            } else {
+                this.sortCriteria = 0;
+                item.setTitle("Sort By User Rating");
+            }
+            FetchMoviesData fetchMoviesData = new FetchMoviesData();
+            fetchMoviesData.execute();
             return true;
         }
 
@@ -70,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
             try {
-                movies = connector.getMovies(1, 60);
+                movies = connector.getMovies(1, 60, sortCriteria);
             } catch (IOException | UnauthorizedException | JSONException e) {
                 // TODO: Display error message
                 return new ArrayList<>();
