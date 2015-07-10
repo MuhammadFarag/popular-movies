@@ -3,12 +3,16 @@ package com.muhammadfarag.popularmovies;
 import android.content.Context;
 import android.net.Uri;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Project: Popular Movies
@@ -18,6 +22,8 @@ class MovieDatabaseServerConnector {
 
     private Context context;
     private final String apikey;
+    private static final int DEFAULT_SERVER_PAGE_SIZE = 20;
+
 
     public MovieDatabaseServerConnector(Context context) {
         this.context = context;
@@ -97,5 +103,18 @@ class MovieDatabaseServerConnector {
             default:
                 throw new IllegalStateException("Connection method is not equipped to handle this case");
         }
+    }
+
+    public List<Movie> getMovies(int page, int pageSize) throws IOException, UnauthorizedException, JSONException {
+        int numberOfServerPagesPerResult = pageSize / DEFAULT_SERVER_PAGE_SIZE;
+        int firstRequiredPage = (page - 1) * numberOfServerPagesPerResult + 1;
+        int lastRequiredPage = page * numberOfServerPagesPerResult;
+
+        List<Movie> movies = new ArrayList<>();
+        for (int i = firstRequiredPage; i <= lastRequiredPage; i++) {
+            String pageData = getPage(i);
+            movies.addAll(new DataParser(pageData).getMovies());
+        }
+        return movies;
     }
 }
