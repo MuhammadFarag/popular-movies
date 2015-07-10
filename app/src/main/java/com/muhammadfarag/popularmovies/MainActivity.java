@@ -58,33 +58,17 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected List<String> doInBackground(Void... params) {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
-            String data = null;
-            try {
-                data = connector.getData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UnauthorizedException e) {
-                e.printStackTrace();
-            }
-            DataParser parser = null;
-            try {
-                parser = new DataParser(data);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            int numberOfResultsInCurrentPage = 0;
-            try {
-                numberOfResultsInCurrentPage = parser.getNumberOfResultsInCurrentPage();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            List<Movie> movies;
             List<String> urls = new ArrayList<>();
-            for (int i = 0; i < numberOfResultsInCurrentPage; i++) {
-                try {
-                    urls.add(parser.getMovie(i).getPosterUrl());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            try {
+                movies = connector.getMovies(1, 60);
+            } catch (IOException | UnauthorizedException | JSONException e) {
+                // TODO: Display error message
+                return urls;
+            }
+
+            for (int i = 0; i < movies.size(); i++) {
+                urls.add(movies.get(i).getPosterUrl());
             }
             return urls;
         }
