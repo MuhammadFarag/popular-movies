@@ -38,4 +38,15 @@ class Movie {
     public String getPosterUrl() {
         return posterUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "originalTitle='" + originalTitle + '\'' +
+                ", userRating=" + userRating +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", plotSynopsis='" + plotSynopsis + '\'' +
+                ", posterUrl='" + posterUrl + '\'' +
+                '}';
+    }
 }

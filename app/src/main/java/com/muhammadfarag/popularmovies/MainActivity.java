@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -22,10 +25,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<String> elements = new ArrayList<>();
+        List<Movie> elements = new ArrayList<>();
         arrayAdapter = new CustomArrayAdapter(getApplicationContext(), R.layout.grid_view_cell, elements);
         GridView gridViewLayout = (GridView) findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
+        gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie movie = (Movie) parent.getAdapter().getItem(position);
+                Toast.makeText(getApplicationContext(), "Selected movie details:" + movie, Toast.LENGTH_LONG).show();
+            }
+        });
         FetchMoviesData fetchMoviesData = new FetchMoviesData();
         fetchMoviesData.execute();
 
@@ -53,29 +63,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class FetchMoviesData extends AsyncTask<Void, Void, List<String>> {
+    private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
 
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected List<Movie> doInBackground(Void... params) {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
-            List<String> urls = new ArrayList<>();
             try {
                 movies = connector.getMovies(1, 60);
             } catch (IOException | UnauthorizedException | JSONException e) {
                 // TODO: Display error message
-                return urls;
+                return new ArrayList<>();
             }
 
-            for (int i = 0; i < movies.size(); i++) {
-                urls.add(movies.get(i).getPosterUrl());
-            }
-            return urls;
+            return movies;
         }
 
         @Override
-        protected void onPostExecute(List<String> strings) {
-            arrayAdapter.updateValues(strings);
+        protected void onPostExecute(List<Movie> movies) {
+            arrayAdapter.updateValues(movies);
         }
     }
 

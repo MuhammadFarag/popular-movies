@@ -19,10 +19,10 @@ class CustomArrayAdapter extends BaseAdapter {
 
     private final Context context;
     private final int resource;
-    private List<String> elements;
+    private List<Movie> elements;
     private final Object mLock = new Object();
 
-    public CustomArrayAdapter(Context context, int resource, List<String> elements) {
+    public CustomArrayAdapter(Context context, int resource, List<Movie> elements) {
         this.context = context;
         this.resource = resource;
         this.elements = elements;
@@ -34,7 +34,7 @@ class CustomArrayAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Movie getItem(int position) {
         return elements.get(position);
     }
 
@@ -50,7 +50,7 @@ class CustomArrayAdapter extends BaseAdapter {
             view = (ImageView) LayoutInflater.from(this.context).inflate(this.resource, parent, false);
         }
 
-        String url = (String) getItem(position);
+        String url =  getItem(position).getPosterUrl();
         Picasso.with(context).load(url).into(view);
 //        Picasso.with(context).load(albumURL).error(R.drawable.no_album_art).into(holder.cell_image);
 
@@ -59,7 +59,7 @@ class CustomArrayAdapter extends BaseAdapter {
         return view;
     }
 
-    public void updateValues(List<String> elements) {
+    public void updateValues(List<Movie> elements) {
         synchronized (mLock) {
             this.elements = elements;
         }
