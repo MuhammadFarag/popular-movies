@@ -5,8 +5,9 @@
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="100dp"
+        android:columnWidth="150dp"
         android:numColumns="auto_fit"
-        android:id="@+id/grid_view_layout"/>
+        android:id="@+id/grid_view_layout"
+        android:background="@color/windowBackground"/>
 
 </RelativeLayout>
