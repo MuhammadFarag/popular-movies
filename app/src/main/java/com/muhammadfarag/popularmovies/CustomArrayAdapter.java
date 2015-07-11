@@ -36,12 +36,14 @@ class CustomArrayAdapter extends BaseAdapter {
     private int pageSize = 20;
     private boolean firstCountCheck = true;
     private Set<String> alreadyProcessedMovies = new HashSet<>();
+    private boolean movingForward = true;
+
 
     public CustomArrayAdapter(Context context, int resource, List<Movie> elements) {
         this.context = context;
         this.resource = resource;
         this.currentView = elements;    // fill current view
-        previousView = currentView;     // fill previous view with data from current view
+        previousView = new ArrayList<>(currentView);     // fill previous view with data from current view
         nextView = new ArrayList<>();   // fill next view with new data
         FetchMoviesData fetchMoviesData = new FetchMoviesData();
         fetchMoviesData.execute(2);
@@ -61,17 +63,30 @@ class CustomArrayAdapter extends BaseAdapter {
     public Movie getItem(int position) {
         Log.d("PMD%%", "Current position is " + position);
         boolean flag = false;
+        // Fixing issue when gridView randomly request view at position 0
         if (position == 0) {
             flag = true;
             position = (currentPage - 1) * pageSize;
             Log.w(TAG, "###### Adjusted position to: [" + position + "]");
         }
-        if (position / pageSize + 1 != currentPage) {
+        if (position / pageSize + 1 > currentPage) {
+            movingForward = true;
             currentPage = position / pageSize + 1;
+            previousView = new ArrayList<>(currentView);
             currentView = new ArrayList<>(nextView);
             FetchMoviesData fetchMoviesData = new FetchMoviesData();
             fetchMoviesData.execute(currentPage + 1);
         }
+        if (position / pageSize + 1 < currentPage) {
+            movingForward = false;
+            currentPage = position / pageSize + 1;
+            currentView = new ArrayList<>(previousView);
+            if (currentPage > 1) {
+                FetchMoviesData fetchMoviesData = new FetchMoviesData();
+                fetchMoviesData.execute(currentPage - 1);
+            }
+        }
+
         Log.d("PMD%%", "Current movie is " + currentView.get(position % pageSize).getOriginalTitle());
         if (alreadyProcessedMovies.contains(currentView.get(position % pageSize).getOriginalTitle()) && !flag) {
             Log.e(TAG, "This movie has been seen before: [" + currentView.get(position % pageSize).getOriginalTitle() + "]");
@@ -110,6 +125,7 @@ class CustomArrayAdapter extends BaseAdapter {
 
     private class FetchMoviesData extends AsyncTask<Integer, Void, List<Movie>> {
 
+
         @Override
         protected List<Movie> doInBackground(Integer... params) {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(context);
@@ -129,8 +145,11 @@ class CustomArrayAdapter extends BaseAdapter {
 
         @Override
         protected void onPostExecute(List<Movie> movies) {
-
-            nextView = movies;
+            if (movingForward) {
+                nextView = movies;
+            } else {
+                previousView = movies;
+            }
         }
     }
 }
