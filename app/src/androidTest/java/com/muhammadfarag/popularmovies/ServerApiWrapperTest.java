@@ -34,7 +34,7 @@ public class ServerApiWrapperTest extends AndroidTestCase {
     public void testGivenRequiredPageSizeOf40ReturnListOfMoviesOfTheSameSizeForFirstPage() throws Exception {
         int requiredPageSize = 40;
         int page = 1;
-        List<Movie> movies = connector.getMovies(page, requiredPageSize);
+        List<Movie> movies = connector.getMovies(page, requiredPageSize,0);
         int numberOfResultsInCurrentPage = movies.size();
 
         assertEquals("Number of movies returned in list", requiredPageSize, numberOfResultsInCurrentPage);
@@ -43,7 +43,7 @@ public class ServerApiWrapperTest extends AndroidTestCase {
     public void testGivenRequiredPageSizeOf60ReturnListOfMoviesOfTheSameSizeForThirdPage() throws Exception {
         int requiredPageSize = 60;
         int page = 3;
-        List<Movie> movies = connector.getMovies(page, requiredPageSize);
+        List<Movie> movies = connector.getMovies(page, requiredPageSize, 0);
         int numberOfResultsInCurrentPage = movies.size();
 
         assertEquals("Number of movies returned in list", requiredPageSize, numberOfResultsInCurrentPage);

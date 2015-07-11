@@ -1,10 +1,12 @@
 package com.muhammadfarag.popularmovies;
 
+import java.io.Serializable;
+
 /**
  * Project: Popular Movies
  * Created by muhammad on 27/06/15.
  */
-class Movie {
+class Movie implements Serializable{
     private String originalTitle;
     private double userRating;
     private String releaseDate;

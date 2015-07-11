@@ -1,5 +1,6 @@
 package com.muhammadfarag.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getAdapter().getItem(position);
-                Toast.makeText(getApplicationContext(), "Selected movie details:" + movie, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                intent.putExtra("movie", movie);
+                startActivity(intent);
             }
         });
         FetchMoviesData fetchMoviesData = new FetchMoviesData();
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
             try {
-                movies = connector.getMovies(1, 60, sortCriteria);
+                movies = connector.getMovies(1, 120, sortCriteria);
             } catch (IOException | UnauthorizedException | JSONException e) {
                 // TODO: Display error message
                 return new ArrayList<>();
