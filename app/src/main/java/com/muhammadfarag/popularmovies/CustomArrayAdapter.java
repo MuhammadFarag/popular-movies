@@ -35,16 +35,16 @@ class CustomArrayAdapter extends BaseAdapter {
     private int currentPage = 1;
     private int pageSize = 20;
     private boolean firstCountCheck = true;
-    private Set<String> aleadyProcessedMovies = new HashSet<>();
+    private Set<String> alreadyProcessedMovies = new HashSet<>();
 
     public CustomArrayAdapter(Context context, int resource, List<Movie> elements) {
         this.context = context;
         this.resource = resource;
-        this.currentView = elements;
-        previousView = new ArrayList<>();
-        nextView = new ArrayList<>();
+        this.currentView = elements;    // fill current view
+        previousView = currentView;     // fill previous view with data from current view
+        nextView = new ArrayList<>();   // fill next view with new data
         FetchMoviesData fetchMoviesData = new FetchMoviesData();
-        fetchMoviesData.execute();
+        fetchMoviesData.execute(2);
     }
 
     @Override
@@ -70,13 +70,13 @@ class CustomArrayAdapter extends BaseAdapter {
             currentPage = position / pageSize + 1;
             currentView = new ArrayList<>(nextView);
             FetchMoviesData fetchMoviesData = new FetchMoviesData();
-            fetchMoviesData.execute();
+            fetchMoviesData.execute(currentPage + 1);
         }
         Log.d("PMD%%", "Current movie is " + currentView.get(position % pageSize).getOriginalTitle());
-        if (aleadyProcessedMovies.contains(currentView.get(position % pageSize).getOriginalTitle()) && !flag) {
+        if (alreadyProcessedMovies.contains(currentView.get(position % pageSize).getOriginalTitle()) && !flag) {
             Log.e(TAG, "This movie has been seen before: [" + currentView.get(position % pageSize).getOriginalTitle() + "]");
         }
-        aleadyProcessedMovies.add(currentView.get(position % pageSize).getOriginalTitle());
+        alreadyProcessedMovies.add(currentView.get(position % pageSize).getOriginalTitle());
         return currentView.get(position % pageSize);
     }
 
@@ -108,14 +108,15 @@ class CustomArrayAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
+    private class FetchMoviesData extends AsyncTask<Integer, Void, List<Movie>> {
 
         @Override
-        protected List<Movie> doInBackground(Void... params) {
+        protected List<Movie> doInBackground(Integer... params) {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(context);
             List<Movie> movies;
+            int pageNumber = params[0];
             try {
-                movies = connector.getMovies(currentPage + 1, 20, 0);
+                movies = connector.getMovies(pageNumber, 20, 0);
                 Log.d(TAG, ">>>>>>>>> loading next page [" + (currentPage + 1) + "]");
             } catch (IOException | UnauthorizedException | JSONException e) {
                 Log.e(TAG, "Error occurred" + e.toString());
