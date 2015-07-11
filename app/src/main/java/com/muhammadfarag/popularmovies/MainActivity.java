@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
             try {
-                movies = connector.getMovies(1, 120, sortCriteria);
+                movies = connector.getMovies(1, 20, sortCriteria);
             } catch (IOException | UnauthorizedException | JSONException e) {
                 // TODO: Display error message
                 return new ArrayList<>();
