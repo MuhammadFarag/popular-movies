@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         List<Movie> movies = (List<Movie>) getLastCustomNonConfigurationInstance();
-        if(movies == null){
+        if (movies == null) {
             FetchMoviesData fetchMoviesData = new FetchMoviesData();
             fetchMoviesData.execute();
         } else {
@@ -75,20 +75,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sorting) {
-            if (this.sortCriteria == 0) {
-                this.sortCriteria = 1;
-                item.setTitle("Sort By Popularity");
-            } else {
-                this.sortCriteria = 0;
-                item.setTitle("Sort By User Rating");
-            }
-            FetchMoviesData fetchMoviesData = new FetchMoviesData();
-            fetchMoviesData.execute();
-            return true;
+        if (id == R.id.action_sort_user_rating) {
+            this.sortCriteria = 1;
+        } else if (id == R.id.action_sort_popularity) {
+            this.sortCriteria = 0;
         }
-
-        return super.onOptionsItemSelected(item);
+        FetchMoviesData fetchMoviesData = new FetchMoviesData();
+        fetchMoviesData.execute();
+        return true;
     }
 
     private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
