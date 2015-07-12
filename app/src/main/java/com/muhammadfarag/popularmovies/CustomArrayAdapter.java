@@ -55,7 +55,7 @@ class CustomArrayAdapter extends BaseAdapter {
         }
 
         String url =  getItem(position).getPosterUrl();
-        Picasso.with(context).load(url).into(view);
+        Picasso.with(context).load(url).error(R.drawable.no_poseter_found).into(view);
 //        Picasso.with(context).load(albumURL).error(R.drawable.no_album_art).into(holder.cell_image);
 
 

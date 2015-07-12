@@ -41,7 +41,7 @@ public class DetailsActivityFragment extends Fragment {
             releaseDate.setText("Release Date [ " + ("null".equals(movie.getReleaseDate())?"N/A":movie.getReleaseDate() )+ " ]");
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.movie_poster);
-            Picasso.with(getActivity()).load(movie.getPosterUrl()).into(imageView);
+            Picasso.with(getActivity()).load(movie.getPosterUrl()).error(R.drawable.no_poseter_found).into(imageView);
 
         }
         return rootView;
