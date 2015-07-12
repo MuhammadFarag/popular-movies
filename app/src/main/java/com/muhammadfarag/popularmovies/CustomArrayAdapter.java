@@ -59,6 +59,7 @@ class CustomArrayAdapter extends BaseAdapter {
         return view;
     }
 
+
     public void updateValues(List<Movie> elements) {
         synchronized (mLock) {
             this.elements = elements;

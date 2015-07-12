@@ -1,9 +1,11 @@
 package com.muhammadfarag.popularmovies;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,12 +79,25 @@ public class MainActivity extends AppCompatActivity {
 
     private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
 
+        private ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+                pd = new ProgressDialog(MainActivity.this);
+                pd.setTitle("Loading Movies...");
+                pd.setMessage("Please wait.");
+                pd.setCancelable(false);
+                pd.setIndeterminate(true);
+                pd.show();
+                Log.d(">>     >>    >>", "++++++++++++ showing waiting dialogue ++++++++++ ");
+        }
+
         @Override
         protected List<Movie> doInBackground(Void... params) {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
             try {
-                movies = connector.getMovies(1, 120, sortCriteria);
+                movies = connector.getMovies(1, 500, sortCriteria);
             } catch (IOException | UnauthorizedException | JSONException e) {
                 // TODO: Display error message
                 return new ArrayList<>();
@@ -94,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Movie> movies) {
             arrayAdapter.updateValues(movies);
+            if(pd!=null){
+                pd.dismiss();
+            }
         }
     }
 
