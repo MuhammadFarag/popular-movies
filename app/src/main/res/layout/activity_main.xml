@@ -5,7 +5,7 @@
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="150dp"
+        android:columnWidth="@dimen/poster_width_small"
         android:numColumns="auto_fit"
         android:id="@+id/grid_view_layout"
         android:background="@color/windowBackground"/>

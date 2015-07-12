@@ -20,11 +20,11 @@
             android:id="@+id/movie_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/activity_spacing_small"
             android:background="@color/colorAccent"
-            android:padding="24dp"
+            android:padding="@dimen/activity_spacing_large"
             android:textColor="@color/textColorPrimary"
-            android:textSize="24dp"
+            android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
 
             />
@@ -33,16 +33,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/activity_spacing_small"
             >
 
             <ImageView
                 android:id="@+id/movie_poster"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:minWidth="150dp"
+                android:minWidth="@dimen/poster_width_small"
                 android:scaleType="fitStart"
                 />
 
@@ -58,7 +58,7 @@
                     android:id="@+id/movie_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
+                    android:padding="@dimen/activity_spacing_small"
                     android:textStyle="bold"
                     />
 
@@ -66,7 +66,7 @@
                     android:id="@+id/movie_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
+                    android:padding="@dimen/activity_spacing_small"
                     android:textStyle="bold"
                     />
             </LinearLayout>
@@ -77,7 +77,7 @@
             android:id="@+id/movie_plot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:textSize="@dimen/text_size_medium"
             />
 
 
