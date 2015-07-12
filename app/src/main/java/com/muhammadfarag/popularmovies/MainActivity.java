@@ -1,6 +1,7 @@
 package com.muhammadfarag.popularmovies;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -45,9 +46,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        FetchMoviesData fetchMoviesData = new FetchMoviesData();
-        fetchMoviesData.execute();
+        List<Movie> movies = (List<Movie>) getLastCustomNonConfigurationInstance();
+        if(movies == null){
+            FetchMoviesData fetchMoviesData = new FetchMoviesData();
+            fetchMoviesData.execute();
+        } else {
+            arrayAdapter.updateValues(movies);
+        }
+    }
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return arrayAdapter.getElements();
     }
 
     @Override
@@ -126,18 +136,24 @@ public class MainActivity extends AppCompatActivity {
                         .setTitle("Authorization Error Occurred")
                         .setMessage("Please paste the api-key for themoviedb.org, or check project readme and set it programmatically!\nCancel will retry the current key")
                         .setView(apiKeyEditText)
-                        .setPositiveButton("Ok", (dialog, whichButton) -> {
-                            String apiKey = apiKeyEditText.getText().toString();
-                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("api-key", apiKey);
-                            editor.commit();
-                            finish();
-                            startActivity(getIntent());
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String apiKey = apiKeyEditText.getText().toString();
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("api-key", apiKey);
+                                editor.commit();
+                                finish();
+                                startActivity(getIntent());
+                            }
                         })
-                        .setNegativeButton("Cancel", (dialog, whichButton) -> {
-                            finish();
-                            startActivity(getIntent());
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                finish();
+                                startActivity(getIntent());
+                            }
                         })
                         .show();
             }

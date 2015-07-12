@@ -28,6 +28,10 @@ class CustomArrayAdapter extends BaseAdapter {
         this.elements = elements;
     }
 
+    public List<Movie> getElements() {
+        return elements;
+    }
+
     @Override
     public int getCount() {
         return elements.size();
