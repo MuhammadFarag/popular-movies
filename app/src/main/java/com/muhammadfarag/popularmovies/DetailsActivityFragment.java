@@ -29,7 +29,7 @@ public class DetailsActivityFragment extends Fragment {
             Movie movie = (Movie) intent.getSerializableExtra("movie");
 
             TextView moviePlot = (TextView) rootView.findViewById(R.id.movie_plot);
-            moviePlot.setText(movie.getPlotSynopsis());
+            moviePlot.setText("null".equals(movie.getPlotSynopsis())?"":movie.getPlotSynopsis());
 
             TextView movieTitle = (TextView) rootView.findViewById(R.id.movie_title);
             movieTitle.setText(movie.getOriginalTitle());
@@ -38,7 +38,7 @@ public class DetailsActivityFragment extends Fragment {
             rating.setText(String.valueOf("User Rating [ " + movie.getUserRating() + "/10 ]"));
 
             TextView releaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
-            releaseDate.setText("Release Date [ " + movie.getReleaseDate()+ " ]");
+            releaseDate.setText("Release Date [ " + ("null".equals(movie.getReleaseDate())?"N/A":movie.getReleaseDate() )+ " ]");
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.movie_poster);
             Picasso.with(getActivity()).load(movie.getPosterUrl()).into(imageView);
