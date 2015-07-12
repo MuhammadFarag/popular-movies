@@ -14,12 +14,12 @@ import java.util.List;
 public class DynamicLoadingDataStructureTest extends TestCase {
 
     private static final String TAG = "ZolaPora";
-    private Data data;
+    private TestDataSet data;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        data = new Data();
+        data = new TestDataSet();
     }
 
     public void testMovingForward() throws Exception {
@@ -70,6 +70,9 @@ public class DynamicLoadingDataStructureTest extends TestCase {
         assertEquals("Unexpected item returned", 200, data.get(200));
     }
 
+    /**
+     * Tested by examining logs (TODO: Better figure automated way for testing)
+     */
     public void testFluctuationDoesNotResultInUpdateRequests() {
         assertEquals("Unexpected item returned", 99, data.get(99));
         assertEquals("Unexpected item returned", 100, data.get(100));
@@ -87,16 +90,11 @@ public class DynamicLoadingDataStructureTest extends TestCase {
     }
 
 
-    private class Data {
-        List<Integer> previous = new ArrayList<>();
-        List<Integer> current = new ArrayList<>();
-        List<Integer> next = new ArrayList<>();
-        private int currentPage = 0;
-        private int moveBackThreshold = 0;
-        private boolean updateNext = false;
-        private boolean updatePrevious = false;
 
-        public Data() {
+
+    private class TestDataSet extends DataSet {
+
+        public TestDataSet() {
             for (int i = 0; i < 100; i++) {
                 current.add(i);
             }
@@ -105,42 +103,7 @@ public class DynamicLoadingDataStructureTest extends TestCase {
             }
         }
 
-        public int get(int i) {
-            Log.d(TAG, ">>>>>>>>> The value of i = [" + i + "] page = [" + currentPage + "] current = [" + current.get(0) + "... ]");
-            Log.d(TAG,"####### The value of i%100 [" + i%100 +"]");
-            if (i % 100 == 50) {
-                if (updateNext) {
-                    next = updateNext(currentPage);
-                    updateNext = false;
-                }
-                if (updatePrevious) {
-                    previous = updatePrevious(currentPage);
-                    updatePrevious = false;
-                }
-            }
-
-            if (i >= 100 * (currentPage + 1) && i < 100 * (currentPage + 2)) {
-                currentPage += 1;
-                moveBackThreshold = currentPage;
-                Log.d(TAG, ">>>>>>>>> Moving forward ++++");
-                previous = new ArrayList<>(current);
-                current = new ArrayList<>(next);
-                updateNext = true;
-                updatePrevious = false;
-            } else if (i < moveBackThreshold * 100 && currentPage == moveBackThreshold) {
-                currentPage -= 1;
-                moveBackThreshold = currentPage;
-                Log.d(TAG, ">>>>>>>>> Moving backward ----- 1");
-                next = new ArrayList<>(current);
-                current = new ArrayList<>(previous);
-                updateNext = false;
-                updatePrevious = true;
-            }
-
-            i = i % 100;
-            return current.get(i);
-        }
-
+        @Override
         public List<Integer> updateNext(int currentPage) {
             Log.d(TAG, "Updating next");
             List<Integer> newPage = new ArrayList<>();
@@ -152,6 +115,7 @@ public class DynamicLoadingDataStructureTest extends TestCase {
             return newPage;
         }
 
+        @Override
         public List<Integer> updatePrevious(int currentPage) {
             Log.d(TAG, "Updating previous");
             List<Integer> newPage = new ArrayList<>();
