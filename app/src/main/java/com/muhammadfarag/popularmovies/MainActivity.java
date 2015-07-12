@@ -2,14 +2,18 @@ package com.muhammadfarag.popularmovies;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import org.json.JSONException;
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sorting) {
-            if(this.sortCriteria == 0){
+            if (this.sortCriteria == 0) {
                 this.sortCriteria = 1;
                 item.setTitle("Sort By Popularity");
             } else {
@@ -80,16 +84,17 @@ public class MainActivity extends AppCompatActivity {
     private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
 
         private ProgressDialog pd;
+        private boolean unauthorizedExceptionOccured = false;
 
         @Override
         protected void onPreExecute() {
-                pd = new ProgressDialog(MainActivity.this);
-                pd.setTitle("Loading Movies...");
-                pd.setMessage("Please wait.");
-                pd.setCancelable(false);
-                pd.setIndeterminate(true);
-                pd.show();
-                Log.d(">>     >>    >>", "++++++++++++ showing waiting dialogue ++++++++++ ");
+            pd = new ProgressDialog(MainActivity.this);
+            pd.setTitle("Loading Movies...");
+            pd.setMessage("Please wait.");
+            pd.setCancelable(false);
+            pd.setIndeterminate(true);
+            pd.show();
+            Log.d(">>     >>    >>", "++++++++++++ showing waiting dialogue ++++++++++ ");
         }
 
         @Override
@@ -98,7 +103,11 @@ public class MainActivity extends AppCompatActivity {
             List<Movie> movies;
             try {
                 movies = connector.getMovies(1, 500, sortCriteria);
-            } catch (IOException | UnauthorizedException | JSONException e) {
+            } catch (IOException | JSONException e) {
+                // TODO: Display error message
+                return new ArrayList<>();
+            } catch (UnauthorizedException e) {
+                unauthorizedExceptionOccured = true;
                 // TODO: Display error message
                 return new ArrayList<>();
             }
@@ -108,8 +117,32 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Movie> movies) {
+            if (unauthorizedExceptionOccured) {
+                final EditText apiKeyEditText = new EditText(MainActivity.this);
+
+                apiKeyEditText.setHint("Api-key as provided by themoviedb.org");
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Authorization Error Occurred")
+                        .setMessage("Please paste the api-key for themoviedb.org, or check project readme and set it programmatically!\nCancel will retry the current key")
+                        .setView(apiKeyEditText)
+                        .setPositiveButton("Ok", (dialog, whichButton) -> {
+                            String apiKey = apiKeyEditText.getText().toString();
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("api-key", apiKey);
+                            editor.commit();
+                            finish();
+                            startActivity(getIntent());
+                        })
+                        .setNegativeButton("Cancel", (dialog, whichButton) -> {
+                            finish();
+                            startActivity(getIntent());
+                        })
+                        .show();
+            }
             arrayAdapter.updateValues(movies);
-            if(pd!=null){
+            if (pd != null) {
                 pd.dismiss();
             }
         }

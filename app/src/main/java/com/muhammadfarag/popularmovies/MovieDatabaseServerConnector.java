@@ -1,7 +1,9 @@
 package com.muhammadfarag.popularmovies;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
 import org.json.JSONException;
 
@@ -27,8 +29,9 @@ class MovieDatabaseServerConnector {
 
     public MovieDatabaseServerConnector(Context context) {
         this.context = context;
-        this.apikey = context.getString(R.string.server_api_key);
-
+//        this.apikey = context.getString(R.string.server_api_key);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.apikey = sharedPreferences.getString("api-key",context.getString(R.string.server_api_key));
     }
 
     public String getData() throws IOException, UnauthorizedException {
