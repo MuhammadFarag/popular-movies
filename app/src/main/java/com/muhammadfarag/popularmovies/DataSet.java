@@ -21,16 +21,28 @@ public abstract class DataSet<T> {
     private boolean updateNext = false;
     private boolean updatePrevious = false;
 
+    public DataSet() {
+        setup();
+    }
+
+    abstract void setup();
+
+    public boolean setupCompleted() {
+        return previous.size() == PAGE_SIZE_100 && previous.size() == PAGE_SIZE_100 && previous.size() == PAGE_SIZE_100;
+    }
+
     public T get(int i) {
-        Log.d(TAG, ">>>>>>>>> The value of i = [" + i + "] page = [" + currentPage + "] current = [" + current.get(0) + "... ]");
-        Log.d(TAG,"####### The value of i%100 [" + i% PAGE_SIZE_100 +"]");
-        if (i % PAGE_SIZE_100 == PAGE_SIZE_100/2) {
+        if (i != 0) {
+            Log.d(TAG, ">>>>>>>>> The value of i = [" + i + "] page = [" + currentPage + "] current = [" + current.get(0) + "... ]");
+            Log.d(TAG, "####### The value of i%100 [" + i % PAGE_SIZE_100 + "]");
+        }
+        if (i % PAGE_SIZE_100 == PAGE_SIZE_100 / 2) {
             if (updateNext) {
-                next = updateNext(currentPage);
+                updateNext(currentPage);
                 updateNext = false;
             }
             if (updatePrevious) {
-                previous = updatePrevious(currentPage);
+                updatePrevious(currentPage);
                 updatePrevious = false;
             }
         }
@@ -38,7 +50,7 @@ public abstract class DataSet<T> {
         if (i >= PAGE_SIZE_100 * (currentPage + 1) && i < PAGE_SIZE_100 * (currentPage + 2)) {
             currentPage += 1;
             moveBackThreshold = currentPage;
-            Log.d(TAG, ">>>>>>>>> Moving forward ++++");
+            Log.d(TAG, ">>>>>>>>> Moving forward ++++Page =" + currentPage);
             previous = new ArrayList<>(current);
             current = new ArrayList<>(next);
             updateNext = true;
@@ -46,7 +58,7 @@ public abstract class DataSet<T> {
         } else if (i < moveBackThreshold * PAGE_SIZE_100 && currentPage == moveBackThreshold) {
             currentPage -= 1;
             moveBackThreshold = currentPage;
-            Log.d(TAG, ">>>>>>>>> Moving backward ----- 1");
+            Log.d(TAG, ">>>>>>>>> Moving backward ----- Page =" + currentPage);
             next = new ArrayList<>(current);
             current = new ArrayList<>(previous);
             updateNext = false;
@@ -57,7 +69,21 @@ public abstract class DataSet<T> {
         return current.get(i);
     }
 
-    abstract List<T> updateNext(int currentPage);
+    public void setNext(List<T> next) {
+        this.next = next;
+        valueUpdated();
+    }
 
-    abstract List<T> updatePrevious(int currentPage);
+    public void setPrevious(List<T> previous) {
+        this.previous = previous;
+        valueUpdated();
+    }
+
+    abstract void updateNext(int currentPage);
+
+    abstract void updatePrevious(int currentPage);
+
+    public void valueUpdated() {
+
+    }
 }

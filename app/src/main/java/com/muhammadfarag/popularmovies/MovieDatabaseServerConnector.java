@@ -100,7 +100,7 @@ class MovieDatabaseServerConnector {
             case HttpURLConnection.HTTP_UNAUTHORIZED:
                 throw new UnauthorizedException();
             default:
-                throw new IllegalStateException("Connection method is not equipped to handle this case");
+                throw new IllegalStateException("Connection method is not equipped to handle this case" + responseCode);
         }
     }
 

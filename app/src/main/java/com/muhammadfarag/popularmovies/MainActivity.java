@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         List<Movie> elements = new ArrayList<>();
-        arrayAdapter = new CustomArrayAdapter(getApplicationContext(), R.layout.grid_view_cell, elements);
+        arrayAdapter = new CustomArrayAdapter(this, R.layout.grid_view_cell, elements);
         GridView gridViewLayout = (GridView) findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {

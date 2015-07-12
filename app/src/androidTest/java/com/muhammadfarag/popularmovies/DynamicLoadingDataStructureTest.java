@@ -89,22 +89,32 @@ public class DynamicLoadingDataStructureTest extends TestCase {
         assertEquals("Unexpected item returned", 99, data.get(99));
     }
 
-
+    public void testFluctuationAround50DoesNotResultInUpdateRequests() {
+        assertEquals("Unexpected item returned", 99, data.get(99));
+        assertEquals("Unexpected item returned", 100, data.get(100));
+        assertEquals("Unexpected item returned", 149, data.get(149));
+        assertEquals("Unexpected item returned", 150, data.get(150));
+        assertEquals("Unexpected item returned", 151, data.get(151));
+        assertEquals("Unexpected item returned", 149, data.get(149));
+        assertEquals("Unexpected item returned", 150, data.get(150));
+        assertEquals("Unexpected item returned", 151, data.get(151));
+        assertEquals("Unexpected item returned", 149, data.get(149));
+        assertEquals("Unexpected item returned", 150, data.get(150));
+        assertEquals("Unexpected item returned", 151, data.get(151));
+        assertEquals("Unexpected item returned", 149, data.get(149));
+        assertEquals("Unexpected item returned", 150, data.get(150));
+        assertEquals("Unexpected item returned", 151, data.get(151));
+        assertEquals("Unexpected item returned", 149, data.get(149));
+        assertEquals("Unexpected item returned", 150, data.get(150));
+        assertEquals("Unexpected item returned", 151, data.get(151));
+    }
 
 
     private class TestDataSet extends DataSet {
 
-        public TestDataSet() {
-            for (int i = 0; i < 100; i++) {
-                current.add(i);
-            }
-            for (int i = 100; i < 200; i++) {
-                next.add(i);
-            }
-        }
 
         @Override
-        public List<Integer> updateNext(int currentPage) {
+        public void updateNext(int currentPage) {
             Log.d(TAG, "Updating next");
             List<Integer> newPage = new ArrayList<>();
             int nextPage = currentPage + 1;
@@ -112,11 +122,11 @@ public class DynamicLoadingDataStructureTest extends TestCase {
             for (int j = 100 * nextPage; j < 100 * (nextPage + 1); j++) {
                 newPage.add(j);
             }
-            return newPage;
+            setNext(newPage);
         }
 
         @Override
-        public List<Integer> updatePrevious(int currentPage) {
+        public void updatePrevious(int currentPage) {
             Log.d(TAG, "Updating previous");
             List<Integer> newPage = new ArrayList<>();
             int nextPage = currentPage - 1;
@@ -124,7 +134,16 @@ public class DynamicLoadingDataStructureTest extends TestCase {
             for (int j = 100 * nextPage; j < 100 * (nextPage + 1); j++) {
                 newPage.add(j);
             }
-            return newPage;
+            setPrevious(newPage);
+        }
+
+        public void setup() {
+            for (int i = 0; i < 100; i++) {
+                current.add(i);
+            }
+            for (int i = 100; i < 200; i++) {
+                next.add(i);
+            }
         }
     }
 }
