@@ -75,10 +75,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sort_user_rating) {
-            this.sortCriteria = 1;
-        } else if (id == R.id.action_sort_popularity) {
-            this.sortCriteria = 0;
+        if (id == R.id.action_sort) {
+            if(this.sortCriteria == 0){
+                this.sortCriteria = 1;
+                item.setTitle(R.string.action_sort_popularity);
+            } else {
+                this.sortCriteria = 0;
+                item.setTitle(R.string.action_sort_user_rating);
+            }
         }
         FetchMoviesData fetchMoviesData = new FetchMoviesData();
         fetchMoviesData.execute();
