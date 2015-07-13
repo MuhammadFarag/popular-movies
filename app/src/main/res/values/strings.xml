@@ -6,4 +6,11 @@
     <string name="title_activity_details">Movie Details</string>
     <string name="action_settings">Settings</string>
     <string name="action_sort_popularity">Sort by Popularity</string>
+    <string name="dialog_authorization_title">Authorization Error Occurred</string>
+    <string name="dialog_authorization_body">Please paste the api-key for themoviedb.org, or check project readme and set it programmatically!\nCancel will retry the current key</string>
+    <string name="dialog_authorization_ok">Ok</string>
+    <string name="dialog_authorization_cancel">Cancel</string>
+    <string name="dialog_authorization_hint">Api-key as provided by themoviedb.org</string>
+    <string name="dialog_progress_title">Loading Movies...</string>
+    <string name="dialog_progress_message">Please wait.</string>
 </resources>

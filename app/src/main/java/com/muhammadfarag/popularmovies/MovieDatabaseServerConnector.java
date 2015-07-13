@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.json.JSONException;
 
@@ -22,6 +23,7 @@ import java.util.List;
  */
 class MovieDatabaseServerConnector {
 
+    private static final String TAG = "ServerConnector";
     private Context context;
     private final String apikey;
     private static final int DEFAULT_SERVER_PAGE_SIZE = 20;
@@ -31,7 +33,7 @@ class MovieDatabaseServerConnector {
         this.context = context;
 //        this.apikey = context.getString(R.string.server_api_key);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        this.apikey = sharedPreferences.getString("api-key",context.getString(R.string.server_api_key));
+        this.apikey = sharedPreferences.getString("api-key", context.getString(R.string.server_api_key));
     }
 
     public String getData() throws IOException, UnauthorizedException {
@@ -70,14 +72,15 @@ class MovieDatabaseServerConnector {
         }
     }
 
-    public String getPage(int page, int sortCriteria) throws IOException, UnauthorizedException{
+    public String getPage(int page, int sortCriteria) throws IOException, UnauthorizedException {
         String baseUrl = this.context.getString(R.string.server_base_url);
         // TODO: store string constants in resource file(s)
         Uri uri = Uri.parse(baseUrl).buildUpon()
-                .appendQueryParameter("sort_by", sortCriteria == 0?"popularity.desc":"vote_average.desc")
+                .appendQueryParameter("sort_by", sortCriteria == 0 ? "popularity.desc" : "vote_average.desc")
                 .appendQueryParameter("api_key", this.apikey)
                 .appendQueryParameter("page", String.valueOf(page))
                 .build();
+        Log.d(TAG, "Loading uri: " + uri.toString());
         HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(uri.toString()).openConnection();
         httpURLConnection.connect();
 
@@ -103,15 +106,18 @@ class MovieDatabaseServerConnector {
             case HttpURLConnection.HTTP_UNAUTHORIZED:
                 throw new UnauthorizedException();
             default:
+                Log.e(TAG, "Unknown response code: " + responseCode);
                 throw new IllegalStateException("Connection method is not equipped to handle this case");
         }
     }
 
     public List<Movie> getMovies(int page, int pageSize, int sortCriteria) throws IOException, UnauthorizedException, JSONException {
+        Log.d(TAG, "PageSize: " + pageSize);
         int numberOfServerPagesPerResult = pageSize / DEFAULT_SERVER_PAGE_SIZE;
+        Log.d(TAG, "Number of server pages per result: " + numberOfServerPagesPerResult);
         int firstRequiredPage = (page - 1) * numberOfServerPagesPerResult + 1;
         int lastRequiredPage = page * numberOfServerPagesPerResult;
-
+        Log.d(TAG, "requesting pages from [" + firstRequiredPage + "] to [" + lastRequiredPage + "]");
         List<Movie> movies = new ArrayList<>();
         for (int i = firstRequiredPage; i <= lastRequiredPage; i++) {
             String pageData = getPage(i, sortCriteria);

@@ -91,18 +91,18 @@ public class MainActivity extends AppCompatActivity {
 
     private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
 
+        private static final int PAGE_NUMBER_1 = 1;
         private ProgressDialog pd;
         private boolean unauthorizedExceptionOccured = false;
 
         @Override
         protected void onPreExecute() {
             pd = new ProgressDialog(MainActivity.this);
-            pd.setTitle("Loading Movies...");
-            pd.setMessage("Please wait.");
+            pd.setTitle(getString(R.string.dialog_progress_title));
+            pd.setMessage(getString(R.string.dialog_progress_message));
             pd.setCancelable(false);
             pd.setIndeterminate(true);
             pd.show();
-            Log.d(">>     >>    >>", "++++++++++++ showing waiting dialogue ++++++++++ ");
         }
 
         @Override
@@ -110,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
             try {
-                movies = connector.getMovies(1, 200, sortCriteria);
+                movies = connector.getMovies(PAGE_NUMBER_1, getResources().getInteger(R.integer.number_of_movies_to_load), sortCriteria);
             } catch (IOException | JSONException e) {
                 // TODO: Display error message
+                Log.e("", "Error occurred while parsing movies data...: " + e.toString());
                 return new ArrayList<>();
             } catch (UnauthorizedException e) {
                 unauthorizedExceptionOccured = true;
-                // TODO: Display error message
                 return new ArrayList<>();
             }
 
@@ -128,13 +128,13 @@ public class MainActivity extends AppCompatActivity {
             if (unauthorizedExceptionOccured) {
                 final EditText apiKeyEditText = new EditText(MainActivity.this);
 
-                apiKeyEditText.setHint("Api-key as provided by themoviedb.org");
+                apiKeyEditText.setHint(getString(R.string.dialog_authorization_hint));
 
                 new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Authorization Error Occurred")
-                        .setMessage("Please paste the api-key for themoviedb.org, or check project readme and set it programmatically!\nCancel will retry the current key")
+                        .setTitle(getString(R.string.dialog_authorization_title))
+                        .setMessage(getString(R.string.dialog_authorization_body))
                         .setView(apiKeyEditText)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.dialog_authorization_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String apiKey = apiKeyEditText.getText().toString();
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(getIntent());
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.dialog_authorization_cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 finish();
