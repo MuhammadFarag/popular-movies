@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataSetUpdateListener{
 
     private CustomArrayAdapter arrayAdapter;
     private int sortCriteria = 0; // sort by popularity
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
         List<Movie> movies = (List<Movie>) getLastCustomNonConfigurationInstance();
         if (movies == null) {
-            FetchMoviesData fetchMoviesData = new FetchMoviesData();
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(this);
             fetchMoviesData.execute();
         } else {
             arrayAdapter.updateValues(movies);
@@ -84,9 +84,14 @@ public class MainActivity extends AppCompatActivity {
                 item.setTitle(R.string.action_sort_user_rating);
             }
         }
-        FetchMoviesData fetchMoviesData = new FetchMoviesData();
+        FetchMoviesData fetchMoviesData = new FetchMoviesData(this);
         fetchMoviesData.execute();
         return true;
+    }
+
+    @Override
+    public void onDataSetUpdated(List<Movie> movies) {
+        arrayAdapter.updateValues(movies);
     }
 
     private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
@@ -94,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
         private static final int PAGE_NUMBER_1 = 1;
         private ProgressDialog pd;
         private boolean unauthorizedExceptionOccured = false;
+        private DataSetUpdateListener listener;
+
+        public FetchMoviesData(DataSetUpdateListener listener) {
+            this.listener = listener;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -140,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                                 String apiKey = apiKeyEditText.getText().toString();
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("api-key", apiKey);
+                                editor.putString("api-key", apiKey).commit();
                                 editor.commit();
                                 finish();
                                 startActivity(getIntent());
@@ -155,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .show();
             }
-            arrayAdapter.updateValues(movies);
+            listener.onDataSetUpdated(movies);
             if (pd != null) {
                 pd.dismiss();
             }
