@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,12 @@ public class FavoriteMoviesManager {
     }
 
     public void remove(Movie movie) {
+        Log.d("zosta", "Movie to be delted: " + movie);
+        Log.d("zosta", "Movie id: " + String.valueOf(movie.getId()));
+
         SQLiteDatabase database = db.getWritableDatabase();
-        database.delete("movie", "id = ?", new String[]{String.valueOf(movie.getId())});
+        int result = database.delete("movie", "id = " + movie.getId(), null);
+        Log.d("zosta", "deleting data result: " + result);
         database.close();
     }
 

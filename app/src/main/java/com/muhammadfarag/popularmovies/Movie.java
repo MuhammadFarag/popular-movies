@@ -55,6 +55,7 @@ class Movie implements Serializable{
                 ", releaseDate='" + releaseDate + '\'' +
                 ", plotSynopsis='" + plotSynopsis + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
+                ", id=" + id +
                 '}';
     }
 }
