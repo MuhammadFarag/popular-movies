@@ -27,21 +27,21 @@ public class FavoriteMoviesManager {
     public void add(int id) {
         SQLiteDatabase database = db.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("name", id);
+        values.put("id", id);
         database.insert("movie", null, values);
         database.close();
     }
 
     public void remove(int id) {
         SQLiteDatabase database = db.getWritableDatabase();
-        database.delete("movie", "name = ?", new String[]{String.valueOf(id)});
+        database.delete("movie", "id = ?", new String[]{String.valueOf(id)});
         database.close();
     }
 
     public boolean isFavorite(int id) {
         SQLiteDatabase database = db.getWritableDatabase();
         Cursor cursor = database.query("movie", null, null, null, null, null, null);
-        int columnIndex = cursor.getColumnIndex("name");
+        int columnIndex = cursor.getColumnIndex("id");
         while (cursor.moveToNext()) {
             if (cursor.getInt(columnIndex) == id) {
                 cursor.close();
@@ -60,7 +60,7 @@ public class FavoriteMoviesManager {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            sqLiteDatabase.execSQL("CREATE TABLE movie(_ID INT PRIMARY KEY, name);");
+            sqLiteDatabase.execSQL("CREATE TABLE movie(_ID INT PRIMARY KEY, id);");
         }
 
         @Override
