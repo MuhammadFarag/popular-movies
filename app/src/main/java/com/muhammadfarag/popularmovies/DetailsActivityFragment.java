@@ -1,10 +1,14 @@
 package com.muhammadfarag.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,8 @@ import com.squareup.picasso.Picasso;
  */
 public class DetailsActivityFragment extends Fragment {
 
+    private FavoriteMoviesManager mManager = FavoriteMoviesManager.create();
+
     public DetailsActivityFragment() {
     }
 
@@ -28,7 +34,7 @@ public class DetailsActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra("movie")) {
-            Movie movie = (Movie) intent.getSerializableExtra("movie");
+            final Movie movie = (Movie) intent.getSerializableExtra("movie");
 
             TextView moviePlot = (TextView) rootView.findViewById(R.id.movie_plot);
             moviePlot.setText("null".equals(movie.getPlotSynopsis())?"":movie.getPlotSynopsis());
@@ -37,11 +43,21 @@ public class DetailsActivityFragment extends Fragment {
             movieTitle.setText(movie.getOriginalTitle());
 
             final TextView movieHearted = (TextView) rootView.findViewById(R.id.movie_hearted);
-            movieHearted.setTextColor(Color.LTGRAY);
+            if(mManager.isFavorite(movie.getOriginalTitle())){
+                movieHearted.setTextColor(Color.BLACK);
+            } else {
+                movieHearted.setTextColor(Color.LTGRAY);
+            }
             movieHearted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    movieHearted.setTextColor(Color.BLACK);
+                    if(mManager.isFavorite(movie.getOriginalTitle())){
+                        mManager.remove(movie.getOriginalTitle());
+                        movieHearted.setTextColor(Color.LTGRAY);
+                    } else {
+                        mManager.add(movie.getOriginalTitle());
+                        movieHearted.setTextColor(Color.BLACK);
+                    }
                 }
             });
 
@@ -57,4 +73,5 @@ public class DetailsActivityFragment extends Fragment {
         }
         return rootView;
     }
+
 }
