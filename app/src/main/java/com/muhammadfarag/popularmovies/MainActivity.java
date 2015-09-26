@@ -27,7 +27,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements DataSetUpdateListener {
 
     private CustomArrayAdapter arrayAdapter;
-    private int sortCriteria = 0; // sort by popularity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +74,13 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sort) {
-            if (this.sortCriteria == 0) {
-                this.sortCriteria = 1;
-                item.setTitle(R.string.action_sort_popularity);
-            } else {
-                this.sortCriteria = 0;
-                item.setTitle(R.string.action_sort_user_rating);
-            }
-            FetchMoviesData fetchMoviesData = new FetchMoviesData(this);
+        if (id == R.id.action_sort_user_rating) {
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(this,1);
             fetchMoviesData.execute();
+        } else if(id == R.id.action_sort_popularity){
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(this,0);
+            fetchMoviesData.execute();
+
         } else if (id == R.id.action_favorites) {
             onDataSetUpdated(FavoriteMoviesManager.create(MainActivity.this).getMovies());
         }
@@ -102,8 +98,15 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
         private ProgressDialog pd;
         private boolean unauthorizedExceptionOccured = false;
         private DataSetUpdateListener listener;
+        private int mSortCriteria = 0;
+
+        public FetchMoviesData(DataSetUpdateListener listener, int sortCriteria) {
+            this.mSortCriteria = sortCriteria;
+            this.listener = listener;
+        }
 
         public FetchMoviesData(DataSetUpdateListener listener) {
+            this.mSortCriteria = 0;
             this.listener = listener;
         }
 
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
             try {
-                movies = connector.getMovies(PAGE_NUMBER_1, getResources().getInteger(R.integer.number_of_movies_to_load), sortCriteria);
+                movies = connector.getMovies(PAGE_NUMBER_1, getResources().getInteger(R.integer.number_of_movies_to_load), mSortCriteria);
             } catch (IOException | JSONException e) {
                 // TODO: Display error message
                 Log.e("", "Error occurred while parsing movies data...: " + e.toString());
