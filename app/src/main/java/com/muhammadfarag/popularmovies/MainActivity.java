@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements DataSetUpdateListener{
+public class MainActivity extends AppCompatActivity implements DataSetUpdateListener {
 
     private CustomArrayAdapter arrayAdapter;
     private int sortCriteria = 0; // sort by popularity
+    private boolean showFavorites = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +77,16 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
-            if(this.sortCriteria == 0){
+            showFavorites = false;
+            if (this.sortCriteria == 0) {
                 this.sortCriteria = 1;
                 item.setTitle(R.string.action_sort_popularity);
             } else {
                 this.sortCriteria = 0;
                 item.setTitle(R.string.action_sort_user_rating);
             }
+        } else if (id == R.id.action_favorites) {
+            showFavorites = true;
         }
         FetchMoviesData fetchMoviesData = new FetchMoviesData(this);
         fetchMoviesData.execute();
@@ -119,15 +123,19 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
         protected List<Movie> doInBackground(Void... params) {
             MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
             List<Movie> movies;
-            try {
-                movies = connector.getMovies(PAGE_NUMBER_1, getResources().getInteger(R.integer.number_of_movies_to_load), sortCriteria);
-            } catch (IOException | JSONException e) {
-                // TODO: Display error message
-                Log.e("", "Error occurred while parsing movies data...: " + e.toString());
-                return new ArrayList<>();
-            } catch (UnauthorizedException e) {
-                unauthorizedExceptionOccured = true;
-                return new ArrayList<>();
+            if (showFavorites) {
+                movies = FavoriteMoviesManager.create(MainActivity.this).getMovies();
+            } else {
+                try {
+                    movies = connector.getMovies(PAGE_NUMBER_1, getResources().getInteger(R.integer.number_of_movies_to_load), sortCriteria);
+                } catch (IOException | JSONException e) {
+                    // TODO: Display error message
+                    Log.e("", "Error occurred while parsing movies data...: " + e.toString());
+                    return new ArrayList<>();
+                } catch (UnauthorizedException e) {
+                    unauthorizedExceptionOccured = true;
+                    return new ArrayList<>();
+                }
             }
 
             return movies;
