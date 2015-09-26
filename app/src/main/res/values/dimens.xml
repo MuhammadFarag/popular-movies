@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_spacing_small">16dp</dimen>
+    <dimen name="activity_spacing_ultra_small">8dp</dimen>
     <dimen name="activity_spacing_large">24dp</dimen>
     <dimen name="poster_width_small">150dp</dimen>
     <dimen name="poster_width_large">300dp</dimen>

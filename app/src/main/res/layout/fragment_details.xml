@@ -26,7 +26,6 @@
             android:textColor="@color/textColorPrimary"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
-
             />
 
         <LinearLayout
@@ -38,7 +37,7 @@
 
             <ImageView
                 android:id="@+id/movie_poster"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
@@ -47,27 +46,33 @@
                 />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 >
 
+                <TextView
+                    android:id="@+id/movie_hearted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_spacing_ultra_small"
+                    android:textStyle="bold"
+                    android:text="+1"
+                    />
 
                 <TextView
                     android:id="@+id/movie_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/activity_spacing_small"
-                    android:textStyle="bold"
+                    android:padding="@dimen/activity_spacing_ultra_small"
                     />
 
                 <TextView
                     android:id="@+id/movie_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/activity_spacing_small"
-                    android:textStyle="bold"
+                    android:padding="@dimen/activity_spacing_ultra_small"
                     />
             </LinearLayout>
 

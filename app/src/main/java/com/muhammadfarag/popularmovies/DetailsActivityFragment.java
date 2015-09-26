@@ -1,6 +1,8 @@
 package com.muhammadfarag.popularmovies;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,6 +35,15 @@ public class DetailsActivityFragment extends Fragment {
 
             TextView movieTitle = (TextView) rootView.findViewById(R.id.movie_title);
             movieTitle.setText(movie.getOriginalTitle());
+
+            final TextView movieHearted = (TextView) rootView.findViewById(R.id.movie_hearted);
+            movieHearted.setTextColor(Color.LTGRAY);
+            movieHearted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    movieHearted.setTextColor(Color.BLACK);
+                }
+            });
 
             TextView rating = (TextView) rootView.findViewById(R.id.movie_rating);
             rating.setText(String.valueOf("User Rating [ " + movie.getUserRating() + "/10 ]"));
