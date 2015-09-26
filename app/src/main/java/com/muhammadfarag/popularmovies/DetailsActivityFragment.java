@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
  */
 public class DetailsActivityFragment extends Fragment {
 
-    private FavoriteMoviesManager mManager = FavoriteMoviesManager.create();
+    private FavoriteMoviesManager mManager;
 
     public DetailsActivityFragment() {
     }
@@ -32,6 +32,7 @@ public class DetailsActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        mManager = FavoriteMoviesManager.create(getActivity());
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra("movie")) {
             final Movie movie = (Movie) intent.getSerializableExtra("movie");
