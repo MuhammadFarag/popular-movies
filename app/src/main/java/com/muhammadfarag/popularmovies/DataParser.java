@@ -22,16 +22,17 @@ class DataParser {
     public static final String POSTER_PATH_KEY = "poster_path";
     public static final String PAGE_NUMBER_KEY = "page";
     public static final String RESULTS_kEY = "results";
+    public static final String ID = "id";
     private final JSONObject jsonObject;
 
     public DataParser(String data) throws JSONException {
         this.jsonObject = new JSONObject(data);
     }
 
+
     public int getCurrentPageNumber() throws JSONException {
         return jsonObject.getInt(PAGE_NUMBER_KEY);
     }
-
 
     public int getTotalNumberOfPages() throws JSONException {
         return jsonObject.getInt(TOTAL_PAGES_KEY);
@@ -49,7 +50,11 @@ class DataParser {
     public Movie getMovie(int id) throws JSONException {
         JSONArray results = jsonObject.getJSONArray(RESULTS_kEY);
         JSONObject movieJsonObject = results.getJSONObject(id);
-        return new Movie(movieJsonObject.getString(ORIGINAL_TITLE_KEY), movieJsonObject.getDouble(VOTE_AVERAGE_KEY), movieJsonObject.getString(RELEASE_DATE_KEY), movieJsonObject.getString(OVERVIEW_KEY), movieJsonObject.getString(POSTER_PATH_KEY));
+        return new Movie(movieJsonObject.getString(ORIGINAL_TITLE_KEY),
+                movieJsonObject.getDouble(VOTE_AVERAGE_KEY),
+                movieJsonObject.getString(RELEASE_DATE_KEY),
+                movieJsonObject.getString(OVERVIEW_KEY),
+                movieJsonObject.getString(POSTER_PATH_KEY), movieJsonObject.getInt(ID));
     }
 
     public List<Movie> getMovies() throws JSONException {
@@ -57,7 +62,11 @@ class DataParser {
         JSONArray results = jsonObject.getJSONArray(RESULTS_kEY);
         for (int i = 0; i < results.length(); i++) {
             JSONObject movieJsonObject = results.getJSONObject(i);
-            Movie movie = new Movie(movieJsonObject.getString(ORIGINAL_TITLE_KEY), movieJsonObject.getDouble(VOTE_AVERAGE_KEY), movieJsonObject.getString(RELEASE_DATE_KEY), movieJsonObject.getString(OVERVIEW_KEY), movieJsonObject.getString(POSTER_PATH_KEY));
+            Movie movie = new Movie(movieJsonObject.getString(ORIGINAL_TITLE_KEY),
+                    movieJsonObject.getDouble(VOTE_AVERAGE_KEY),
+                    movieJsonObject.getString(RELEASE_DATE_KEY),
+                    movieJsonObject.getString(OVERVIEW_KEY),
+                    movieJsonObject.getString(POSTER_PATH_KEY), movieJsonObject.getInt(ID));
             movies.add(movie);
         }
         return movies;

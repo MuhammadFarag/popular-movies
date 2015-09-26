@@ -24,7 +24,7 @@ public class FavoriteMoviesManager {
         return sMoviesManager;
     }
 
-    public void add(String id) {
+    public void add(int id) {
         SQLiteDatabase database = db.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", id);
@@ -32,18 +32,18 @@ public class FavoriteMoviesManager {
         database.close();
     }
 
-    public void remove(String id) {
+    public void remove(int id) {
         SQLiteDatabase database = db.getWritableDatabase();
-        database.delete("movie", "name = ?", new String[]{id});
+        database.delete("movie", "name = ?", new String[]{String.valueOf(id)});
         database.close();
     }
 
-    public boolean isFavorite(String id) {
+    public boolean isFavorite(int id) {
         SQLiteDatabase database = db.getWritableDatabase();
         Cursor cursor = database.query("movie", null, null, null, null, null, null);
         int columnIndex = cursor.getColumnIndex("name");
         while (cursor.moveToNext()) {
-            if (cursor.getString(columnIndex).equals(id)) {
+            if (cursor.getInt(columnIndex) == id) {
                 cursor.close();
                 return true;
             }

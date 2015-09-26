@@ -44,7 +44,7 @@ public class DetailsActivityFragment extends Fragment {
             movieTitle.setText(movie.getOriginalTitle());
 
             final TextView movieHearted = (TextView) rootView.findViewById(R.id.movie_hearted);
-            if(mManager.isFavorite(movie.getOriginalTitle())){
+            if(mManager.isFavorite(movie.getId())){
                 movieHearted.setTextColor(Color.BLACK);
             } else {
                 movieHearted.setTextColor(Color.LTGRAY);
@@ -52,11 +52,11 @@ public class DetailsActivityFragment extends Fragment {
             movieHearted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(mManager.isFavorite(movie.getOriginalTitle())){
-                        mManager.remove(movie.getOriginalTitle());
+                    if(mManager.isFavorite(movie.getId())){
+                        mManager.remove(movie.getId());
                         movieHearted.setTextColor(Color.LTGRAY);
                     } else {
-                        mManager.add(movie.getOriginalTitle());
+                        mManager.add(movie.getId());
                         movieHearted.setTextColor(Color.BLACK);
                     }
                 }

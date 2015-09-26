@@ -12,13 +12,19 @@ class Movie implements Serializable{
     private String releaseDate;
     private String plotSynopsis;
     private String posterUrl;
+    private int id;
 
-    public Movie(String originalTitle, double userRating, String releaseDate, String plotSynopsis, String posterPath) {
+    public Movie(String originalTitle, double userRating, String releaseDate, String plotSynopsis, String posterPath, int id) {
         this.originalTitle = originalTitle;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
         this.plotSynopsis = plotSynopsis;
+        this.id = id;
         this.posterUrl =  "http://image.tmdb.org/t/p/w185" + posterPath;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getOriginalTitle() {
