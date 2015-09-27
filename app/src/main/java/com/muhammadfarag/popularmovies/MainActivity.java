@@ -1,25 +1,14 @@
 package com.muhammadfarag.popularmovies;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
         });
         List<Movie> movies = (List<Movie>) getLastCustomNonConfigurationInstance();
         if (movies == null) {
-            FetchMoviesData fetchMoviesData = new FetchMoviesData(this);
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(this, this);
             fetchMoviesData.execute();
         } else {
             arrayAdapter.updateValues(movies);
@@ -75,10 +64,10 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort_user_rating) {
-            FetchMoviesData fetchMoviesData = new FetchMoviesData(this,1);
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(this, this, 1);
             fetchMoviesData.execute();
-        } else if(id == R.id.action_sort_popularity){
-            FetchMoviesData fetchMoviesData = new FetchMoviesData(this,0);
+        } else if (id == R.id.action_sort_popularity) {
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(this, this, 0);
             fetchMoviesData.execute();
 
         } else if (id == R.id.action_favorites) {
@@ -90,91 +79,6 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
     @Override
     public void onDataSetUpdated(List<Movie> movies) {
         arrayAdapter.updateValues(movies);
-    }
-
-    private class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
-
-        private static final int PAGE_NUMBER_1 = 1;
-        private ProgressDialog pd;
-        private boolean unauthorizedExceptionOccured = false;
-        private DataSetUpdateListener listener;
-        private int mSortCriteria = 0;
-
-        public FetchMoviesData(DataSetUpdateListener listener, int sortCriteria) {
-            this.mSortCriteria = sortCriteria;
-            this.listener = listener;
-        }
-
-        public FetchMoviesData(DataSetUpdateListener listener) {
-            this.mSortCriteria = 0;
-            this.listener = listener;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pd = new ProgressDialog(MainActivity.this);
-            pd.setTitle(getString(R.string.dialog_progress_title));
-            pd.setMessage(getString(R.string.dialog_progress_message));
-            pd.setCancelable(false);
-            pd.setIndeterminate(true);
-            pd.show();
-        }
-
-        @Override
-        protected List<Movie> doInBackground(Void... params) {
-            MovieDatabaseServerConnector connector = new MovieDatabaseServerConnector(getApplicationContext());
-            List<Movie> movies;
-            try {
-                movies = connector.getMovies(PAGE_NUMBER_1, getResources().getInteger(R.integer.number_of_movies_to_load), mSortCriteria);
-            } catch (IOException | JSONException e) {
-                // TODO: Display error message
-                Log.e("", "Error occurred while parsing movies data...: " + e.toString());
-                return new ArrayList<>();
-            } catch (UnauthorizedException e) {
-                unauthorizedExceptionOccured = true;
-                return new ArrayList<>();
-            }
-
-            return movies;
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movies) {
-            if (unauthorizedExceptionOccured) {
-                final EditText apiKeyEditText = new EditText(MainActivity.this);
-
-                apiKeyEditText.setHint(getString(R.string.dialog_authorization_hint));
-
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(getString(R.string.dialog_authorization_title))
-                        .setMessage(getString(R.string.dialog_authorization_body))
-                        .setView(apiKeyEditText)
-                        .setPositiveButton(getString(R.string.dialog_authorization_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                String apiKey = apiKeyEditText.getText().toString();
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("api-key", apiKey).commit();
-                                editor.commit();
-                                finish();
-                                startActivity(getIntent());
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.dialog_authorization_cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                finish();
-                                startActivity(getIntent());
-                            }
-                        })
-                        .show();
-            }
-            listener.onDataSetUpdated(movies);
-            if (pd != null) {
-                pd.dismiss();
-            }
-        }
     }
 
 
