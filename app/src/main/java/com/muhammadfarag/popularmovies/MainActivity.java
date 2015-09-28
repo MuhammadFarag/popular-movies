@@ -22,14 +22,14 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         List<Movie> elements = new ArrayList<>();
-        arrayAdapter = new CustomArrayAdapter(getApplicationContext(), R.layout.grid_view_cell, elements);
+        arrayAdapter = new CustomArrayAdapter(this, R.layout.grid_view_cell, elements);
         GridView gridViewLayout = (GridView) findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                 intent.putExtra("movie", movie);
                 startActivity(intent);
             }
