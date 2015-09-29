@@ -3,13 +3,11 @@ package com.muhammadfarag.popularmovies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Project: Popular Movies
  * Created by muhammad on 27/06/15.
  */
-class Movie implements Serializable, Parcelable {
+class Movie implements Parcelable {
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
         @Override

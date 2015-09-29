@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,7 @@ public class DetailsActivityFragment extends Fragment {
         mManager = FavoriteMoviesManager.create(getActivity());
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra("movie")) {
-            final Movie movie = (Movie) intent.getSerializableExtra("movie");
-            Log.d("Retrived movie: ", String.valueOf(movie));
+            final Movie movie = intent.getParcelableExtra("movie");
 
             TextView moviePlot = (TextView) rootView.findViewById(R.id.movie_plot);
             moviePlot.setText("null".equals(movie.getPlotSynopsis()) ? "" : movie.getPlotSynopsis());

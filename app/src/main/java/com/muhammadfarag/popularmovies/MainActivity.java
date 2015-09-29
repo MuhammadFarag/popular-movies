@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra("movie", (Serializable) movie);
+                intent.putExtra("movie", movie);
                 startActivity(intent);
             }
         });
