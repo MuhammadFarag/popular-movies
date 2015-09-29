@@ -2,6 +2,7 @@ package com.muhammadfarag.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,20 +10,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements DataSetUpdateListener {
 
+    public static final String KEY_MOVIES = "key_movies";
     private CustomArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<Movie> elements = new ArrayList<>();
-        arrayAdapter = new CustomArrayAdapter(this, R.layout.grid_view_cell, elements);
+        arrayAdapter = new CustomArrayAdapter(this, R.layout.grid_view_cell, new ArrayList<Movie>());
         GridView gridViewLayout = (GridView) findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -30,11 +32,15 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra("movie", movie);
+                intent.putExtra("movie", (Serializable) movie);
                 startActivity(intent);
             }
         });
-        List<Movie> movies = (List<Movie>) getLastCustomNonConfigurationInstance();
+        List<Movie> movies = null;
+        if (savedInstanceState != null) {
+            movies = savedInstanceState.getParcelableArrayList(KEY_MOVIES);
+        }
+
         if (movies == null) {
             FetchMoviesData fetchMoviesData = new FetchMoviesData(this, this);
             fetchMoviesData.execute();
@@ -43,9 +49,12 @@ public class MainActivity extends AppCompatActivity implements DataSetUpdateList
         }
     }
 
+
     @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return arrayAdapter.getElements();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_MOVIES, (ArrayList<? extends Parcelable>) arrayAdapter.getElements());
+
     }
 
     @Override

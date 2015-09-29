@@ -1,12 +1,28 @@
 package com.muhammadfarag.popularmovies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Project: Popular Movies
  * Created by muhammad on 27/06/15.
  */
-class Movie implements Serializable{
+class Movie implements Serializable, Parcelable {
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+
+    };
     private String originalTitle;
     private double userRating;
     private String releaseDate;
@@ -20,7 +36,16 @@ class Movie implements Serializable{
         this.releaseDate = releaseDate;
         this.plotSynopsis = plotSynopsis;
         this.id = id;
-        this.posterUrl =  "http://image.tmdb.org/t/p/w185" + posterPath;
+        this.posterUrl = "http://image.tmdb.org/t/p/w185" + posterPath;
+    }
+
+    public Movie(Parcel parcel) {
+        this.originalTitle = parcel.readString();
+        this.userRating = parcel.readDouble();
+        this.releaseDate = parcel.readString();
+        this.plotSynopsis = parcel.readString();
+        this.posterUrl = parcel.readString();
+        this.id = parcel.readInt();
     }
 
     public int getId() {
@@ -57,5 +82,20 @@ class Movie implements Serializable{
                 ", posterUrl='" + posterUrl + '\'' +
                 ", id=" + id +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(originalTitle);
+        parcel.writeDouble(userRating);
+        parcel.writeString(releaseDate);
+        parcel.writeString(plotSynopsis);
+        parcel.writeString(posterUrl);
+        parcel.writeInt(id);
     }
 }
