@@ -34,7 +34,7 @@ class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
         this.listener = listener;
     }
 
-    public FetchMoviesData(MainActivity activity, DataSetUpdateListener listener) {
+    public FetchMoviesData(Activity activity, DataSetUpdateListener listener) {
         mActivity = activity;
         this.mSortCriteria = 0;
         this.listener = listener;
