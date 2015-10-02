@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Project: Popular Movies
  * Created by muhammad on 27/06/15.
  */
-class Movie implements Parcelable {
+public class Movie implements Parcelable {
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
         @Override

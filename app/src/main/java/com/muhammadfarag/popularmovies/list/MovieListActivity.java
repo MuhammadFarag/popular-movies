@@ -1,9 +1,11 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.list;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.muhammadfarag.popularmovies.R;
 
 public class MovieListActivity extends AppCompatActivity {
 

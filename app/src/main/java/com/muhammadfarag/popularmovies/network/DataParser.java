@@ -1,4 +1,6 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.network;
+
+import com.muhammadfarag.popularmovies.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +13,7 @@ import java.util.List;
  * Project: Popular Movies
  * Created by muhammad on 27/06/15.
  */
-class DataParser {
+public class DataParser {
     public static final String TOTAL_PAGES_KEY = "total_pages";
     public static final String TOTAL_RESULTS_KEY = "total_results";
     public static final String RESULTS_KEY = "results";

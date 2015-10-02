@@ -1,4 +1,4 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.details;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
+import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 

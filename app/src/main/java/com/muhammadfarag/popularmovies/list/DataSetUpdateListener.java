@@ -1,4 +1,6 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.list;
+
+import com.muhammadfarag.popularmovies.Movie;
 
 import java.util.List;
 

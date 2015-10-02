@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
+import com.muhammadfarag.popularmovies.list.CustomArrayAdapter;
+
 /**
  * Project: Popular Movies
  * Created by muhammad on 28/06/15.

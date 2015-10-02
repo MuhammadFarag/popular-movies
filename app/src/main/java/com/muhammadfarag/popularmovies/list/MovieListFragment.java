@@ -1,4 +1,4 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.list;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import com.muhammadfarag.popularmovies.details.DetailsActivity;
+import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
+import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.R;
 
 import java.util.ArrayList;
 import java.util.List;

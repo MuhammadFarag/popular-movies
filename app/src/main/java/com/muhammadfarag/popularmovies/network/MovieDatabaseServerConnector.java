@@ -1,10 +1,13 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.R;
 
 import org.json.JSONException;
 
@@ -21,7 +24,7 @@ import java.util.List;
  * Project: Popular Movies
  * Created by muhammad on 26/06/15.
  */
-class MovieDatabaseServerConnector {
+public class MovieDatabaseServerConnector {
 
     private static final String TAG = "ServerConnector";
     private Context context;

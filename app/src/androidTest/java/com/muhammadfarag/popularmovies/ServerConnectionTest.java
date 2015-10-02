@@ -2,6 +2,8 @@ package com.muhammadfarag.popularmovies;
 
 import android.test.AndroidTestCase;
 
+import com.muhammadfarag.popularmovies.network.MovieDatabaseServerConnector;
+
 /**
  * Project: Popular Movies
  * Created by muhammad on 25/06/15.

@@ -1,4 +1,4 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.network;
 
 /**
  * Project: Popular Movies

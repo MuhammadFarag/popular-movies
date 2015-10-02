@@ -1,4 +1,4 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.list;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
  * Project: Popular Movies
  * Created by muhammad on 01/07/15.
  */
-class CustomArrayAdapter extends BaseAdapter {
+public class CustomArrayAdapter extends BaseAdapter {
 
     private final Context context;
     private final int resource;

@@ -1,4 +1,4 @@
-package com.muhammadfarag.popularmovies;
+package com.muhammadfarag.popularmovies.list;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -10,6 +10,11 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.network.MovieDatabaseServerConnector;
+import com.muhammadfarag.popularmovies.R;
+import com.muhammadfarag.popularmovies.network.UnauthorizedException;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -19,7 +24,7 @@ import java.util.List;
 /**
  * Created by muhammadfarag on 9/27/15.
  */
-class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
+public class FetchMoviesData extends AsyncTask<Void, Void, List<Movie>> {
 
     private static final int PAGE_NUMBER_1 = 1;
     private Activity mActivity;
