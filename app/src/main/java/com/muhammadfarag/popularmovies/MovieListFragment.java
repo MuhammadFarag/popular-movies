@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +26,11 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
     public static final String KEY_MOVIES = "key_movies";
     private CustomArrayAdapter arrayAdapter;
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +52,7 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main, container);
+        View view = inflater.inflate(R.layout.activity_main, container, false);
         GridView gridViewLayout = (GridView) view.findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -68,4 +77,34 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
     public void onDataSetUpdated(List<Movie> movies) {
         arrayAdapter.updateValues(movies);
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_sort_user_rating) {
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(getActivity(), this, 1);
+            fetchMoviesData.execute();
+        } else if (id == R.id.action_sort_popularity) {
+            FetchMoviesData fetchMoviesData = new FetchMoviesData(getActivity(), this, 0);
+            fetchMoviesData.execute();
+
+        } else if (id == R.id.action_favorites) {
+            onDataSetUpdated(FavoriteMoviesManager.create(getActivity()).getMovies());
+        }
+        return true;
+    }
+
 }
