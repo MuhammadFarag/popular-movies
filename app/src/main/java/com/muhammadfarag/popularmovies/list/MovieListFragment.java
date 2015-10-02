@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,10 +15,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.muhammadfarag.popularmovies.details.DetailsActivity;
 import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
 import com.muhammadfarag.popularmovies.Movie;
 import com.muhammadfarag.popularmovies.R;
+import com.muhammadfarag.popularmovies.details.DetailsActivity;
+import com.muhammadfarag.popularmovies.details.DetailsActivityFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,17 +57,27 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies_list, container, false);
         GridView gridViewLayout = (GridView) view.findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Movie movie = (Movie) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra("movie", movie);
-                startActivity(intent);
+                if (getActivity().findViewById(R.id.fragment_details) != null) {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                    Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_details);
+//                    if (fragment == null) {
+                    Movie movie = (Movie) parent.getAdapter().getItem(position);
+                    Fragment fragment = DetailsActivityFragment.newInstance(movie);
+                    fragmentManager.beginTransaction().add(R.id.fragment_details, fragment).commit();
+//                    }
+                } else {
+                    Movie movie = (Movie) parent.getAdapter().getItem(position);
+                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                    intent.putExtra("movie", movie);
+                    startActivity(intent);
+                }
             }
         });
         return view;
@@ -88,7 +100,6 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
     }
-
 
 
     @Override
