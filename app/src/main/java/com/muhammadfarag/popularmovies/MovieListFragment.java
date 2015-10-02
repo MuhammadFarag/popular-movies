@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,7 +51,7 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_movies_list, container, false);
         GridView gridViewLayout = (GridView) view.findViewById(R.id.grid_view_layout);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
