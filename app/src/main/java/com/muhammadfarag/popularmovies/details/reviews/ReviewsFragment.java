@@ -55,6 +55,7 @@ public class ReviewsFragment extends Fragment implements ReviewsDataSetUpdateLis
 
         ListView gridViewLayout = (ListView) view.findViewById(R.id.trailer_list_view);
         gridViewLayout.setAdapter(arrayAdapter);
+        gridViewLayout.setEmptyView(view.findViewById(R.id.empty));
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
