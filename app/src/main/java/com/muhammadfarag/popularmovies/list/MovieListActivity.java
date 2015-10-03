@@ -15,6 +15,6 @@ public class MovieListActivity extends BaseActivity {
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_master_detail;
+        return R.layout.activity_movies_list;
     }
 }
