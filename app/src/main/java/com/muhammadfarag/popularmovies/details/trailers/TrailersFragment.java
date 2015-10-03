@@ -62,6 +62,7 @@ public class TrailersFragment extends Fragment implements TrailersDataSetUpdateL
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position))));
             }
         });
+        view.setBackgroundColor(getResources().getColor(R.color.windowBackground));
 
         return view;
     }

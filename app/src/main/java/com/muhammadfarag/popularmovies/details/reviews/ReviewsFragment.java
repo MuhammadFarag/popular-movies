@@ -12,9 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.muhammadfarag.popularmovies.R;
-import com.muhammadfarag.popularmovies.details.trailers.FetchTrailers;
-import com.muhammadfarag.popularmovies.details.trailers.TrailersArrayAdapter;
-import com.muhammadfarag.popularmovies.details.trailers.TrailersDataSetUpdateListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +62,7 @@ public class ReviewsFragment extends Fragment implements ReviewsDataSetUpdateLis
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position))));
             }
         });
-
+        view.setBackgroundColor(getResources().getColor(R.color.windowBackground));
         return view;
     }
 

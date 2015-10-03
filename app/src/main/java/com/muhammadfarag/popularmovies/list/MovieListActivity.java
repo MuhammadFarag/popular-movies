@@ -1,13 +1,13 @@
 package com.muhammadfarag.popularmovies.list;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import com.muhammadfarag.popularmovies.BaseActivity;
 import com.muhammadfarag.popularmovies.R;
 import com.muhammadfarag.popularmovies.details.DetailsActivityFragment;
-import com.muhammadfarag.popularmovies.details.reviews.ReviewsActivity;
-import com.muhammadfarag.popularmovies.details.trailers.TrailersActivity;
+import com.muhammadfarag.popularmovies.details.reviews.ReviewsFragment;
+import com.muhammadfarag.popularmovies.details.trailers.TrailersFragment;
 
 public class MovieListActivity extends BaseActivity implements DetailsActivityFragment.CallBacks {
 
@@ -24,11 +24,17 @@ public class MovieListActivity extends BaseActivity implements DetailsActivityFr
 
     @Override
     public void showReviews() {
-        startActivity(new Intent(this, ReviewsActivity.class));
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_details, ReviewsFragment.newInstance(218)).addToBackStack(null).commit();
+
+//                startActivity(new Intent(this, ReviewsActivity.class));
     }
 
     @Override
     public void showTrailers() {
-        startActivity(new Intent(this, TrailersActivity.class));
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_details, TrailersFragment.newInstance(218)).addToBackStack(null).commit();
+
+//        startActivity(new Intent(this, TrailersActivity.class));
     }
 }
