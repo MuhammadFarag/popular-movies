@@ -66,6 +66,7 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (getActivity().findViewById(R.id.fragment_details) != null) {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 //                    Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_details);
 //                    if (fragment == null) {
                     Movie movie = (Movie) parent.getAdapter().getItem(position);
