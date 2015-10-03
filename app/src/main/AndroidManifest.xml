@@ -20,13 +20,11 @@
         </activity>
         <activity
             android:name=".details.DetailsActivity"
-            android:label="@string/title_activity_details"
-            android:parentActivityName=".list.MovieListActivity">
+            android:label="@string/title_activity_details">
         </activity>
         <activity
             android:name=".details.TrailersActivity"
-            android:label="Movie Trailers"
-            android:parentActivityName=".details.DetailsActivity"/>
+            android:label="Movie Trailers"/>
     </application>
 
 </manifest>
