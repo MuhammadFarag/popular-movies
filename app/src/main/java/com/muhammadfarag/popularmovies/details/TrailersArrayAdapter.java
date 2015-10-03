@@ -36,7 +36,7 @@ public class TrailersArrayAdapter extends BaseAdapter {
 
     @Override
     public String getItem(int position) {
-        return (String) elements.keySet().toArray()[position];
+        return (String) elements.values().toArray()[position];
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TrailersArrayAdapter extends BaseAdapter {
             view = (TextView) LayoutInflater.from(this.context).inflate(this.resource, parent, false);
         }
 
-        view.setText(getItem(position));
+        view.setText((String) elements.keySet().toArray()[position]);
         return view;
     }
 

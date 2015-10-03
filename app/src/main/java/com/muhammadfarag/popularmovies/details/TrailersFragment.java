@@ -1,5 +1,7 @@
 package com.muhammadfarag.popularmovies.details;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -50,6 +52,8 @@ public class TrailersFragment extends Fragment implements TrailersDataSetUpdateL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.e("tag", "Trailer was selected but nothing to be done ");
+                Log.d("tag", "Trailer to Display: " + "http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position))));
             }
         });
 
