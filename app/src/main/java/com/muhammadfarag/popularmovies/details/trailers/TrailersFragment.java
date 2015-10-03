@@ -52,7 +52,7 @@ public class TrailersFragment extends Fragment implements TrailersDataSetUpdateL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trailers, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         ListView gridViewLayout = (ListView) view.findViewById(R.id.trailer_list_view);
         gridViewLayout.setAdapter(arrayAdapter);

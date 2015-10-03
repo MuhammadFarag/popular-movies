@@ -36,7 +36,6 @@ public class ReviewsFragment extends Fragment implements ReviewsDataSetUpdateLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         arrayAdapter = new ReviewsArrayAdapter(getActivity(), android.R.layout.simple_list_item_2, new HashMap<String, String>());
-
         Map<String, String> elements = null;
 //        if (savedInstanceState != null) {
 //            elements = savedInstanceState.getParcelableArrayList("");
@@ -52,7 +51,7 @@ public class ReviewsFragment extends Fragment implements ReviewsDataSetUpdateLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trailers, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         ListView gridViewLayout = (ListView) view.findViewById(R.id.trailer_list_view);
         gridViewLayout.setAdapter(arrayAdapter);

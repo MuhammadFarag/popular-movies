@@ -11,4 +11,11 @@
         android:background="@color/windowBackground"
         android:columnWidth="@dimen/poster_width_small"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/empty"
+        android:text="Nothing to display at this time"
+        />
+
 </LinearLayout>
