@@ -1,6 +1,6 @@
 package com.muhammadfarag.popularmovies.details;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
 import com.muhammadfarag.popularmovies.Movie;
 import com.muhammadfarag.popularmovies.R;
-import com.muhammadfarag.popularmovies.details.reviews.ReviewsActivity;
-import com.muhammadfarag.popularmovies.details.trailers.TrailersActivity;
 import com.squareup.picasso.Picasso;
 
 
@@ -25,6 +23,14 @@ public class DetailsActivityFragment extends Fragment {
 
     public static final String ARG_MOVIE = "arg_movie";
     private FavoriteMoviesManager mManager;
+    // Fixme: Use a callback interface instead
+    private CallBacks mCallBacks;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallBacks = (CallBacks) activity;
+    }
 
     public DetailsActivityFragment() {
     }
@@ -81,17 +87,22 @@ public class DetailsActivityFragment extends Fragment {
         rootView.findViewById(R.id.movie_trailers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), TrailersActivity.class));
+                mCallBacks.showTrailers();
             }
         });
         rootView.findViewById(R.id.movie_reviews).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), ReviewsActivity.class));
+                mCallBacks.showReviews();
             }
         });
 
         return rootView;
+    }
+
+    public interface CallBacks{
+        public void showReviews();
+        public void showTrailers();
     }
 
 }

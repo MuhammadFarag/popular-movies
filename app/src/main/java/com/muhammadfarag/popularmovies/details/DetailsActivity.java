@@ -6,9 +6,11 @@ import android.view.Menu;
 
 import com.muhammadfarag.popularmovies.BaseActivity;
 import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.details.reviews.ReviewsActivity;
+import com.muhammadfarag.popularmovies.details.trailers.TrailersActivity;
 
 
-public class DetailsActivity extends BaseActivity {
+public class DetailsActivity extends BaseActivity implements DetailsActivityFragment.CallBacks {
 
 
     @Override
@@ -23,4 +25,13 @@ public class DetailsActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    public void showReviews() {
+        startActivity(new Intent(this, ReviewsActivity.class));
+    }
+
+    @Override
+    public void showTrailers() {
+        startActivity(new Intent(this, TrailersActivity.class));
+    }
 }
