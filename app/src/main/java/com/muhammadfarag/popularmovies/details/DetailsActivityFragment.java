@@ -1,5 +1,6 @@
 package com.muhammadfarag.popularmovies.details;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -74,6 +75,13 @@ public class DetailsActivityFragment extends Fragment {
 
         ImageView imageView = (ImageView) rootView.findViewById(R.id.movie_poster);
         Picasso.with(getActivity()).load(movie.getPosterUrl()).error(R.drawable.no_poseter_found).into(imageView);
+
+        rootView.findViewById(R.id.movie_trailers).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), TrailersActivity.class));
+            }
+        });
 
         return rootView;
     }

@@ -15,4 +15,5 @@
     <string name="dialog_progress_message">Please wait.</string>
     <string name="action_show_favorites">Show Favorites</string>
     <string name="title_activity_movie_list">MovieListActivity</string>
+    <string name="button_trailer">Trailers</string>
 </resources>
