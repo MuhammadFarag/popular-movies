@@ -1,4 +1,4 @@
-package com.muhammadfarag.popularmovies.details;
+package com.muhammadfarag.popularmovies.details.trailers;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

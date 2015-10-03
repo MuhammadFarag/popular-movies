@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
 import com.muhammadfarag.popularmovies.Movie;
 import com.muhammadfarag.popularmovies.R;
+import com.muhammadfarag.popularmovies.details.trailers.TrailersActivity;
 import com.squareup.picasso.Picasso;
 
 
