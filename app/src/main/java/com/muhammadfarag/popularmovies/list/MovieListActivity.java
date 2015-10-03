@@ -23,18 +23,14 @@ public class MovieListActivity extends BaseActivity implements DetailsActivityFr
     }
 
     @Override
-    public void showReviews() {
+    public void showReviews(int id) {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_details, ReviewsFragment.newInstance(218)).addToBackStack(null).commit();
-
-//                startActivity(new Intent(this, ReviewsActivity.class));
+        manager.beginTransaction().replace(R.id.fragment_details, ReviewsFragment.newInstance(id)).addToBackStack(null).commit();
     }
 
     @Override
-    public void showTrailers() {
+    public void showTrailers(int id) {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_details, TrailersFragment.newInstance(218)).addToBackStack(null).commit();
-
-//        startActivity(new Intent(this, TrailersActivity.class));
+        manager.beginTransaction().replace(R.id.fragment_details, TrailersFragment.newInstance(id)).addToBackStack(null).commit();
     }
 }

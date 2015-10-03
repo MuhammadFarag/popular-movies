@@ -87,13 +87,13 @@ public class DetailsActivityFragment extends Fragment {
         rootView.findViewById(R.id.movie_trailers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallBacks.showTrailers();
+                mCallBacks.showTrailers(movie.getId());
             }
         });
         rootView.findViewById(R.id.movie_reviews).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallBacks.showReviews();
+                mCallBacks.showReviews(movie.getId());
             }
         });
 
@@ -101,8 +101,8 @@ public class DetailsActivityFragment extends Fragment {
     }
 
     public interface CallBacks{
-        public void showReviews();
-        public void showTrailers();
+        public void showReviews(int id);
+        public void showTrailers(int id);
     }
 
 }

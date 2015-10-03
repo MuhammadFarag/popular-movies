@@ -26,12 +26,16 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityFrag
     }
 
     @Override
-    public void showReviews() {
-        startActivity(new Intent(this, ReviewsActivity.class));
+    public void showReviews(int id) {
+        Intent intent = new Intent(this, ReviewsActivity.class);
+        intent.putExtra("extra_movie_id", id);
+        startActivity(intent);
     }
 
     @Override
-    public void showTrailers() {
-        startActivity(new Intent(this, TrailersActivity.class));
+    public void showTrailers(int id) {
+        Intent intent = new Intent(this, TrailersActivity.class);
+        intent.putExtra("extra_movie_id", id);
+        startActivity(intent);
     }
 }

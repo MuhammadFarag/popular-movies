@@ -11,6 +11,6 @@ import com.muhammadfarag.popularmovies.details.trailers.TrailersFragment;
 public class ReviewsActivity extends BaseActivity {
     @Override
     protected Fragment createFragment() {
-        return  ReviewsFragment.newInstance(218);
+        return  ReviewsFragment.newInstance(getIntent().getIntExtra("extra_movie_id",0));
     }
 }
