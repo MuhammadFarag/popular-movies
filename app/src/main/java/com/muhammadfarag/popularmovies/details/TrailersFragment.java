@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,16 @@ import java.util.Map;
  */
 public class TrailersFragment extends Fragment implements TrailersDataSetUpdateListener {
 
+    public static final String KEY_ID = "id";
     private TrailersArrayAdapter arrayAdapter;
+
+    public static TrailersFragment newInstance(int id) {
+        TrailersFragment fragment = new TrailersFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(KEY_ID, id);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,12 +41,12 @@ public class TrailersFragment extends Fragment implements TrailersDataSetUpdateL
 //        if (savedInstanceState != null) {
 //            elements = savedInstanceState.getParcelableArrayList("");
 //        }
-        if (elements == null) {
-            FetchTrailers fetchTrailers = new FetchTrailers(getActivity(), this);
-            fetchTrailers.execute(218);
-        } else {
-            arrayAdapter.updateValues(elements);
-        }
+//        if (elements == null) {
+        FetchTrailers fetchTrailers = new FetchTrailers(getActivity(), this);
+        fetchTrailers.execute(getArguments().getInt(KEY_ID));
+//        } else {
+//            arrayAdapter.updateValues(elements);
+//        }
     }
 
     @Nullable
@@ -51,8 +59,6 @@ public class TrailersFragment extends Fragment implements TrailersDataSetUpdateL
         gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("tag", "Trailer was selected but nothing to be done ");
-                Log.d("tag", "Trailer to Display: " + "http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position));
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position))));
             }
         });

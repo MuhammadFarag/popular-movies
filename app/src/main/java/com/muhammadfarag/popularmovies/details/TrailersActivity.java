@@ -10,6 +10,6 @@ import com.muhammadfarag.popularmovies.BaseActivity;
 public class TrailersActivity extends BaseActivity {
     @Override
     protected Fragment createFragment() {
-        return new TrailersFragment();
+        return  TrailersFragment.newInstance(218);
     }
 }
