@@ -25,6 +25,9 @@
         <activity
             android:name=".details.trailers.TrailersActivity"
             android:label="Movie Trailers"/>
+        <activity
+            android:name=".details.reviews.ReviewsActivity"
+            android:label="Movie Trailers"/>
     </application>
 
 </manifest>

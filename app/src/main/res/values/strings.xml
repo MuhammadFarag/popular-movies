@@ -16,4 +16,5 @@
     <string name="action_show_favorites">Show Favorites</string>
     <string name="title_activity_movie_list">MovieListActivity</string>
     <string name="button_trailer">Trailers</string>
+    <string name="button_reviews">Reviews</string>
 </resources>

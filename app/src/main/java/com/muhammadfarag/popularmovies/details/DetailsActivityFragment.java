@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
 import com.muhammadfarag.popularmovies.Movie;
 import com.muhammadfarag.popularmovies.R;
+import com.muhammadfarag.popularmovies.details.reviews.ReviewsActivity;
 import com.muhammadfarag.popularmovies.details.trailers.TrailersActivity;
 import com.squareup.picasso.Picasso;
 
@@ -81,6 +82,12 @@ public class DetailsActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), TrailersActivity.class));
+            }
+        });
+        rootView.findViewById(R.id.movie_reviews).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ReviewsActivity.class));
             }
         });
 
