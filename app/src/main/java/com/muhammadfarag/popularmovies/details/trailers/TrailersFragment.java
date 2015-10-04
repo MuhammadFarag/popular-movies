@@ -3,27 +3,18 @@ package com.muhammadfarag.popularmovies.details.trailers;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.muhammadfarag.popularmovies.R;
-import com.muhammadfarag.popularmovies.details.DataSetUpdateListener;
+import com.muhammadfarag.popularmovies.details.MovieElementsFragment;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by muhammadfarag on 10/3/15.
  */
-public class TrailersFragment extends Fragment implements DataSetUpdateListener {
-
-    public static final String KEY_ID = "id";
-    private TrailersArrayAdapter arrayAdapter;
+public class TrailersFragment extends MovieElementsFragment {
 
     public static TrailersFragment newInstance(int id) {
         TrailersFragment fragment = new TrailersFragment();
@@ -34,43 +25,26 @@ public class TrailersFragment extends Fragment implements DataSetUpdateListener 
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        arrayAdapter = new TrailersArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, new HashMap<String, String>());
-
-        Map<String, String> elements = null;
-//        if (savedInstanceState != null) {
-//            elements = savedInstanceState.getParcelableArrayList("");
-//        }
-//        if (elements == null) {
-        FetchTrailers fetchTrailers = new FetchTrailers(getActivity(), this);
-        fetchTrailers.execute(getArguments().getInt(KEY_ID));
-//        } else {
-//            arrayAdapter.updateValues(elements);
-//        }
+    @NonNull
+    protected FetchTrailers setMovieElementsFetcher() {
+        return new FetchTrailers(getActivity(), this);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+    @NonNull
+    protected TrailersArrayAdapter setArrayAdapter() {
+        return new TrailersArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, new HashMap<String, String>());
+    }
 
-        ListView gridViewLayout = (ListView) view.findViewById(R.id.trailer_list_view);
-        gridViewLayout.setAdapter(arrayAdapter);
-        gridViewLayout.setEmptyView(view.findViewById(R.id.empty));
-        gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    @NonNull
+    protected AdapterView.OnItemClickListener setonItemClickListener() {
+        return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position))));
             }
-        });
-        view.setBackgroundColor(getResources().getColor(R.color.windowBackground));
-
-        return view;
+        };
     }
 
-    @Override
-    public void onDataSetUpdated(Map<String, String> trailers) {
-        arrayAdapter.updateValues(trailers);
-    }
 }
