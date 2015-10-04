@@ -57,12 +57,6 @@ public class ReviewsFragment extends Fragment implements DataSetUpdateListener {
         ListView gridViewLayout = (ListView) view.findViewById(R.id.trailer_list_view);
         gridViewLayout.setAdapter(arrayAdapter);
         gridViewLayout.setEmptyView(view.findViewById(R.id.empty));
-        gridViewLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + arrayAdapter.getItem(position))));
-            }
-        });
         view.setBackgroundColor(getResources().getColor(R.color.windowBackground));
         return view;
     }
