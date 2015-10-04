@@ -1,14 +1,15 @@
 package com.muhammadfarag.popularmovies.details;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
 import com.muhammadfarag.popularmovies.Movie;
@@ -26,12 +27,6 @@ public class DetailsActivityFragment extends Fragment {
     // Fixme: Use a callback interface instead
     private CallBacks mCallBacks;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mCallBacks = (CallBacks) activity;
-    }
-
     public DetailsActivityFragment() {
     }
 
@@ -41,6 +36,12 @@ public class DetailsActivityFragment extends Fragment {
         bundle.putParcelable(ARG_MOVIE, movie);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallBacks = (CallBacks) activity;
     }
 
     @Override
@@ -56,21 +57,24 @@ public class DetailsActivityFragment extends Fragment {
         TextView movieTitle = (TextView) rootView.findViewById(R.id.movie_title);
         movieTitle.setText(movie.getOriginalTitle());
 
-        final TextView movieHearted = (TextView) rootView.findViewById(R.id.movie_hearted);
+
+        final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         if (mManager.isFavorite(movie)) {
-            movieHearted.setTextColor(Color.BLACK);
+            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
         } else {
-            movieHearted.setTextColor(Color.LTGRAY);
+            fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
-        movieHearted.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mManager.isFavorite(movie)) {
                     mManager.remove(movie);
-                    movieHearted.setTextColor(Color.LTGRAY);
+                    fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    Toast.makeText(getActivity(), movie.getOriginalTitle() + " has been removed from your favorites", Toast.LENGTH_SHORT).show();
                 } else {
                     mManager.add(movie);
-                    movieHearted.setTextColor(Color.BLACK);
+                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    Toast.makeText(getActivity(), movie.getOriginalTitle() + " has been added to your favorites", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -100,8 +104,9 @@ public class DetailsActivityFragment extends Fragment {
         return rootView;
     }
 
-    public interface CallBacks{
+    public interface CallBacks {
         public void showReviews(int id);
+
         public void showTrailers(int id);
     }
 
