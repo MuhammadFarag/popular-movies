@@ -51,7 +51,7 @@ public class FetchTrailers extends AsyncTask<Integer, Void, Map<String, String>>
         MovieTrailersServerConnector connector = new MovieTrailersServerConnector(mActivity, params[0]);
         Map<String, String> trailers;
         try {
-            trailers = connector.getTrailers();
+            trailers = connector.getElements();
         } catch (IOException | JSONException e) {
             // TODO: Display error message
             Log.e("", "Error occurred while parsing trailers data...: " + e.toString());
