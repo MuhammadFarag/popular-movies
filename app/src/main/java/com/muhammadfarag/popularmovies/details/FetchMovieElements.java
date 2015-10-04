@@ -39,7 +39,7 @@ public abstract class FetchMovieElements extends AsyncTask<Integer, Void, Map<St
     @Override
     protected void onPreExecute() {
         pd = new ProgressDialog(mActivity);
-        pd.setTitle(mActivity.getString(R.string.dialog_progress_title));
+        pd.setTitle("Loading elements...");
         pd.setMessage(mActivity.getString(R.string.dialog_progress_message));
         pd.setCancelable(false);
         pd.setIndeterminate(true);
