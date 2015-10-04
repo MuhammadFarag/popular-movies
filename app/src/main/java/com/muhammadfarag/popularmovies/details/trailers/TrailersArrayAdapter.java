@@ -4,45 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.muhammadfarag.popularmovies.details.MovieElementsAdapter;
 
 import java.util.Map;
 
 /**
  * Created by muhammadfarag on 10/3/15.
  */
-public class TrailersArrayAdapter extends BaseAdapter {
-
-    private final Context context;
-    private final int resource;
-    private final Object mLock = new Object();
-    private Map<String, String> elements;
+public class TrailersArrayAdapter extends MovieElementsAdapter {
 
     public TrailersArrayAdapter(Context context, int resource, Map<String, String> elements) {
-        this.context = context;
-        this.resource = resource;
-        this.elements = elements;
+        super(elements, resource, context);
     }
 
-    public Map<String, String> getElements() {
-        return elements;
-    }
-
-    @Override
-    public int getCount() {
-        return elements.size();
-    }
-
-    @Override
-    public String getItem(int position) {
-        return (String) elements.values().toArray()[position];
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,12 +31,5 @@ public class TrailersArrayAdapter extends BaseAdapter {
         return view;
     }
 
-
-    public void updateValues(Map<String, String> elements) {
-        synchronized (mLock) {
-            this.elements = elements;
-        }
-        notifyDataSetChanged();
-    }
 
 }
