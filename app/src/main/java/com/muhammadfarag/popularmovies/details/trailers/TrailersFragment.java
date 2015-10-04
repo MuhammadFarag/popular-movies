@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.muhammadfarag.popularmovies.R;
+import com.muhammadfarag.popularmovies.details.DataSetUpdateListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * Created by muhammadfarag on 10/3/15.
  */
-public class TrailersFragment extends Fragment implements TrailersDataSetUpdateListener {
+public class TrailersFragment extends Fragment implements DataSetUpdateListener {
 
     public static final String KEY_ID = "id";
     private TrailersArrayAdapter arrayAdapter;

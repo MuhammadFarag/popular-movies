@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.muhammadfarag.popularmovies.R;
+import com.muhammadfarag.popularmovies.details.DataSetUpdateListener;
 import com.muhammadfarag.popularmovies.network.UnauthorizedException;
 
 import org.json.JSONException;
@@ -27,10 +28,10 @@ public class FetchReviews extends AsyncTask<Integer, Void, Map<String, String>> 
     private Activity mActivity;
     private ProgressDialog pd;
     private boolean unauthorizedExceptionOccurred = false;
-    private ReviewsDataSetUpdateListener listener;
+    private DataSetUpdateListener listener;
 
 
-    public FetchReviews(Activity activity, ReviewsDataSetUpdateListener listener) {
+    public FetchReviews(Activity activity, DataSetUpdateListener listener) {
         mActivity = activity;
         this.listener = listener;
     }
