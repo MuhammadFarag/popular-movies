@@ -27,9 +27,9 @@ import java.util.List;
 public class MovieDatabaseServerConnector {
 
     private static final String TAG = "ServerConnector";
-    private Context context;
-    private final String apikey;
     private static final int DEFAULT_SERVER_PAGE_SIZE = 20;
+    private final String apikey;
+    private Context context;
 
 
     public MovieDatabaseServerConnector(Context context) {

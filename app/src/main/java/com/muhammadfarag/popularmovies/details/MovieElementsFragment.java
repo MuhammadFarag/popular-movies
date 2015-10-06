@@ -11,9 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.muhammadfarag.popularmovies.R;
-import com.muhammadfarag.popularmovies.details.DataSetUpdateListener;
-import com.muhammadfarag.popularmovies.details.FetchMovieElements;
-import com.muhammadfarag.popularmovies.details.MovieElementsAdapter;
 
 import java.util.Map;
 
@@ -23,7 +20,6 @@ import java.util.Map;
 public abstract class MovieElementsFragment extends Fragment implements DataSetUpdateListener {
     public static final String KEY_ID = "id";
     protected MovieElementsAdapter arrayAdapter;
-
 
 
     @Override

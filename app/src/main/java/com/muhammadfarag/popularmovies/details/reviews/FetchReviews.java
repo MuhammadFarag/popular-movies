@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.muhammadfarag.popularmovies.details.DataSetUpdateListener;
-import com.muhammadfarag.popularmovies.details.MovieServerConnector;
 import com.muhammadfarag.popularmovies.details.FetchMovieElements;
+import com.muhammadfarag.popularmovies.details.MovieServerConnector;
 
 /**
  * Created by muhammadfarag on 10/3/15.

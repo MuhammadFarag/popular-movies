@@ -21,8 +21,8 @@ public class CustomArrayAdapter extends BaseAdapter {
 
     private final Context context;
     private final int resource;
-    private List<Movie> elements;
     private final Object mLock = new Object();
+    private List<Movie> elements;
 
     public CustomArrayAdapter(Context context, int resource, List<Movie> elements) {
         this.context = context;
@@ -56,7 +56,7 @@ public class CustomArrayAdapter extends BaseAdapter {
             view = (ImageView) LayoutInflater.from(this.context).inflate(this.resource, parent, false);
         }
 
-        String url =  getItem(position).getPosterUrl();
+        String url = getItem(position).getPosterUrl();
         Picasso.with(context).load(url).error(R.drawable.no_poseter_found).into(view);
         return view;
     }

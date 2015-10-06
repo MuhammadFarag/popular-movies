@@ -12,8 +12,6 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.muhammadfarag.popularmovies.R;
-import com.muhammadfarag.popularmovies.details.DataSetUpdateListener;
-import com.muhammadfarag.popularmovies.details.MovieServerConnector;
 import com.muhammadfarag.popularmovies.network.UnauthorizedException;
 
 import org.json.JSONException;
