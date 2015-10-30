@@ -52,16 +52,14 @@ public class FavoriteMoviesManager {
     }
 
     public boolean isFavorite(Movie movie) {
-        // FIXME: Improve the implementation of isFavorite to query for a specific record
-        Cursor cursor = mContentResolver.query(MoviesContract.MovieEntry.CONTENT_URI, null, null, null, null);
-        int columnIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID);
-        while (cursor.moveToNext()) {
-            if (cursor.getInt(columnIndex) == movie.getId()) {
+        Cursor cursor = mContentResolver.query(MoviesContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movie.getId())).build(), null, null, null, null);
+        if (cursor != null) {
+            if (cursor.getCount() == 1) {
                 cursor.close();
                 return true;
             }
+            cursor.close();
         }
-        cursor.close();
         return false;
     }
 

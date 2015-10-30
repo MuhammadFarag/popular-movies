@@ -25,5 +25,10 @@ public class MoviesContract {
         public static final String COLUMN_PLOT = "plot";
         public static final String COLUMN_POSTER_URL = "poster_url";
 
+        public static String extractMovieId(Uri uri) {
+            return uri.getLastPathSegment();
+        }
+
+
     }
 }

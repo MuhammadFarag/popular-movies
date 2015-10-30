@@ -44,16 +44,19 @@ public class MoviesContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.d(TAG, "Attempting to query for Uri: " + uri);
+        Log.v(TAG, "Attempting to query for Uri: " + uri);
+        // FIXME: fix the selection parameter
+        final String singleMovieQuerySelection = MovieEntry.TABLE_NAME + "." + MovieEntry.COLUMN_ID + " = " + MovieEntry.extractMovieId(uri);
         int match = mUriMatcher.match(uri);
         switch (match) {
             case CODE_MOVIE:
                 Log.v(TAG, "matched for a single movie with id: " + extractMovieId(uri));
-                return sQueryBuilder.query(mMoviesDatabaseHelper.getReadableDatabase(), null, MovieEntry.COLUMN_ID + " = ?", new String[]{extractMovieId(uri)}, null, null, null);
+                return sQueryBuilder.query(mMoviesDatabaseHelper.getReadableDatabase(), null, singleMovieQuerySelection, new String[]{}, null, null, null);
             case CODE_MOVIES:
                 Log.v(TAG, "matched for a all movies");
                 return sQueryBuilder.query(mMoviesDatabaseHelper.getReadableDatabase(), null, null, null, null, null, null);
             default:
+                Log.w(TAG, "No match found for uri: " + uri);
                 return null;
         }
     }
