@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -16,6 +17,12 @@ import java.util.List;
 public class FavoriteMoviesManager {
     private static FavoriteMoviesManager sMoviesManager;
     private MoviesDatabase db;
+    private static final SQLiteQueryBuilder sQueryBuilder;
+
+    static {
+        sQueryBuilder = new SQLiteQueryBuilder();
+        sQueryBuilder.setTables("movie");
+    }
 
     private FavoriteMoviesManager(Context context) {
         db = new MoviesDatabase(context, 1);
@@ -54,7 +61,7 @@ public class FavoriteMoviesManager {
 
     public boolean isFavorite(Movie movie) {
         SQLiteDatabase database = db.getWritableDatabase();
-        Cursor cursor = database.query("movie", null, null, null, null, null, null);
+        Cursor cursor = sQueryBuilder.query(database, null, null, null, null, null, null);
         int columnIndex = cursor.getColumnIndex("id");
         while (cursor.moveToNext()) {
             if (cursor.getInt(columnIndex) == movie.getId()) {
@@ -69,7 +76,7 @@ public class FavoriteMoviesManager {
     public List<Movie> getMovies() {
         List<Movie> movies = new ArrayList<>();
         SQLiteDatabase database = db.getWritableDatabase();
-        Cursor cursor = database.query("movie", null, null, null, null, null, null);
+        Cursor cursor = sQueryBuilder.query(database, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             Movie movie = new Movie(cursor.getString(cursor.getColumnIndex("title")),
                     cursor.getDouble(cursor.getColumnIndex("rating")),
