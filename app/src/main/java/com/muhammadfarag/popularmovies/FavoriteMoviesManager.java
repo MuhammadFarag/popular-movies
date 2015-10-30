@@ -4,9 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -24,10 +22,10 @@ public class FavoriteMoviesManager {
         sQueryBuilder.setTables(MoviesContract.MovieEntry.TABLE_NAME);
     }
 
-    private MoviesDatabase db;
+    private MoviesDatabaseHelper db;
 
     private FavoriteMoviesManager(Context context) {
-        db = new MoviesDatabase(context);
+        db = new MoviesDatabaseHelper(context);
     }
 
     public static FavoriteMoviesManager create(Context context) {
@@ -90,49 +88,6 @@ public class FavoriteMoviesManager {
         }
         cursor.close();
         return movies;
-    }
-
-    private class MoviesDatabase extends SQLiteOpenHelper {
-
-        public static final String DATABASE_NAME = "movie.db";
-        public static final int DATABASE_VERSION = 1;
-
-        public MoviesDatabase(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            String createTableQuery = generateCreateTableQuery(MoviesContract.MovieEntry.TABLE_NAME, new String[]{
-                    MoviesContract.MovieEntry._ID,
-                    MoviesContract.MovieEntry.COLUMN_ID,
-                    MoviesContract.MovieEntry.COLUMN_TITLE,
-                    MoviesContract.MovieEntry.COLUMN_RATING,
-                    MoviesContract.MovieEntry.COLUMN_RELEASE_DATE,
-                    MoviesContract.MovieEntry.COLUMN_PLOT,
-                    MoviesContract.MovieEntry.COLUMN_POSTER_URL});
-            sqLiteDatabase.execSQL(createTableQuery);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-            // upgrade is not supported yet
-        }
-
-        private String generateCreateTableQuery(String tableName, String[] columnNames) {
-            StringBuilder builder = new StringBuilder("CREATE TABLE ");
-            builder.append(tableName).append("(");
-            builder.append(BaseColumns._ID);
-            builder.append(" INT PRIMARY KEY, ");
-            for (int i = 1; i < columnNames.length; i++) {
-                builder.append(columnNames[i]);
-                if (i != columnNames.length - 1) {
-                    builder.append(", ");
-                }
-            }
-            builder.append(");");
-            return builder.toString();
-        }
     }
 
 }
