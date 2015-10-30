@@ -28,6 +28,10 @@
         <activity
             android:name=".details.reviews.ReviewsActivity"
             android:label="Movie Trailers"/>
+
+        <provider
+            android:authorities="com.muhammadfarag.popularmovies"
+            android:name=".MoviesContentProvider"/>
     </application>
 
 </manifest>
