@@ -1,11 +1,15 @@
 package com.muhammadfarag.popularmovies.list;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,8 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.muhammadfarag.popularmovies.FavoriteMoviesManager;
 import com.muhammadfarag.popularmovies.Movie;
+import com.muhammadfarag.popularmovies.MoviesContract;
 import com.muhammadfarag.popularmovies.R;
 import com.muhammadfarag.popularmovies.details.DetailsActivity;
 import com.muhammadfarag.popularmovies.details.DetailsActivityFragment;
@@ -27,9 +31,10 @@ import java.util.List;
 /**
  * Created by muhammadfarag on 9/30/15.
  */
-public class MovieListFragment extends Fragment implements DataSetUpdateListener {
+public class MovieListFragment extends Fragment implements DataSetUpdateListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String KEY_MOVIES = "key_movies";
+    public static final int LOADER_ID_FAVORITE_MOVIES = 101;
     private CustomArrayAdapter arrayAdapter;
 
     @Override
@@ -116,11 +121,35 @@ public class MovieListFragment extends Fragment implements DataSetUpdateListener
         } else if (id == R.id.action_sort_popularity) {
             FetchMoviesData fetchMoviesData = new FetchMoviesData(getActivity(), this, 0);
             fetchMoviesData.execute();
-
         } else if (id == R.id.action_favorites) {
-            onDataSetUpdated(FavoriteMoviesManager.create(getActivity()).getMovies());
+            getLoaderManager().restartLoader(LOADER_ID_FAVORITE_MOVIES, null, this);
         }
         return true;
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(), MoviesContract.MovieEntry.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        List<Movie> movies = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            Movie movie = new Movie(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE)),
+                    cursor.getDouble(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RATING)),
+                    cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE)),
+                    cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_PLOT)),
+                    cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_URL)),
+                    cursor.getInt(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID)));
+            movies.add(movie);
+        }
+        cursor.close();
+        arrayAdapter.updateValues(movies);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }

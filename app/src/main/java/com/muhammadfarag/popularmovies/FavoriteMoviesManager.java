@@ -6,9 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by muhammadfarag on 9/26/15.
  */
@@ -61,23 +58,6 @@ public class FavoriteMoviesManager {
             cursor.close();
         }
         return false;
-    }
-
-    public List<Movie> getMovies() {
-
-        Cursor cursor = mContentResolver.query(MoviesContract.MovieEntry.CONTENT_URI, null, null, null, null);
-        List<Movie> movies = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            Movie movie = new Movie(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE)),
-                    cursor.getDouble(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RATING)),
-                    cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE)),
-                    cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_PLOT)),
-                    cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_URL)),
-                    cursor.getInt(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID)));
-            movies.add(movie);
-        }
-        cursor.close();
-        return movies;
     }
 
 }
